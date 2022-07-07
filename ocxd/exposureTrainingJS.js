@@ -116,6 +116,19 @@
 
     var letter;
 
+    function determineStart() {
+        if (combinedTArray.length !== 0 && combinedNArray.length !== 0) {
+            hideStart();
+            beginTraining();
+        } else if (combinedTArray.length == 0 && combinedNArray.length !==0) {
+            alert("Insufficient trigger media. Please enter some trigger media in the Triggers List.")
+        } else if (combinedTArray.length !== 0 && combinedNArray.length ==0) {
+            alert("insufficient neutral media. Please enter some neutral media in the Triggers List.")
+        } else {
+            alert("insufficient trigger and neutral media. Please enter some trigger and neutral media in the Triggers List.")
+        }
+    }
+
     function beginTraining(){
 
         document.getElementById("letter").classList.add("hidden");

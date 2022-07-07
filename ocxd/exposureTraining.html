@@ -498,12 +498,12 @@
     <button class="button" onclick="parent.location='index.html'" id="backButton"></button>
     <button class="button" id="videoButton" onclick="showVideos();">Insert Video Triggers</button>
 
-    <button id="e" class="button centered">E</button>
+    <button id="e" class="button centered" onclick="checkE();">E</button>
 </div>
 
 <div id="game" class="totalCenter">
-    <div id="start" onclick="hideStart(); beginTraining(); updateArrays();">
-        <h2 class="totalCenter">To begin playing, click anywhere on this screen. Make sure your Triggers are set up before playing. Refresh the page after you are done adding the triggers.<button id="triggersButton" onclick="window.open('file:///Users/annikachavez/Library/Mobile Documents/com~apple~CloudDocs/code/ocdapp/triggersList.html'); event.stopPropagation(); " class="button">Click here to set up your Triggers.</button></h2>
+    <div id="start" onclick="determineStart(); updateArrays();">
+        <h2 class="totalCenter">To begin playing, click anywhere on this screen. Make sure your Triggers are set up before playing. Refresh the page after you are done adding the triggers.<button id="triggersButton" onclick="window.open('triggersList.html'); event.stopPropagation(); " class="button">Click here to set up your Triggers.</button></h2>
 
     </div>
 
@@ -519,7 +519,7 @@
 </div>
 
 <div id="fContainer">
-<button id="f" class="button centered">F</button>
+<button id="f" class="button centered" onclick="checkF();">F</button>
 </div>
 
 
