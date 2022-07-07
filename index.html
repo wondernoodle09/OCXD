@@ -322,7 +322,6 @@
 	}
 
 	#rightMenu {
-		right: 0px;
 		top: 274px;
 		right: 8px;
 	}
@@ -339,7 +338,13 @@
 </div>
 
 <ul>
-  <li class="dividerVertical"><a href="#home" onclick="parent.location='index.html'">Data</a></li>
+  <li class="dividerVertical dropdown"><a href="#home" onclick="parent.location='index.html'">Data</a>
+  <div class="dropdown-content">
+      <a href="#" onclick="parent.location='exposureInput.html'">Exposure Input</a>
+      <a href="#">Past Exposures</a>
+      <a href="#">Exposure Graphs</a>
+    </div>
+  </li>
   <li class="dividerVertical dropdown">
     <a href="javascript:void(0)" class="dropbtn" onclick="parent.location='exposures.html'">Exposure Training</a>
     <div class="dropdown-content">

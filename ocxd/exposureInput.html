@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+</script>
+<style type="text/css">
+
+	body {
+  	background-color: #7dcfb6;
+	}
+
+	h1 {
+		font-family: officeSquare;
+		font-size: 100px;
+		margin: 10px;
+		text-shadow: 5px 5px #f79256, 
+                    1px 1px 0 #f79256,
+                    1px -1px 0 #f79256,
+                    -1px -1px 0 #f79256;
+    cursor: pointer;
+    color: #1c4e89;
+	}
+
+	h2 {
+		font-family: officeSquare;
+		font-size: 42px;
+		color: #1c4e89;
+		text-shadow: 5px 5px #f79256, 
+                    1px 1px 0 #f79256,
+                    1px -1px 0 #f79256,
+                    -1px -1px 0 #f79256;
+
+	}
+
+	a {
+		font-family: officeSquare;
+		font-size: 24px;
+		color: #fad1a2;
+	}
+
+	p {
+		font-family: officeSquare;
+		font-size: 24px;
+		margin: 2px;
+	}
+
+	input {
+		background-color: white;
+    color:#1c4e89;
+    font-family: officeSquare;
+    font-size: 26px;
+    width: 97px;
+	}
+
+	ul {
+    margin: 0px;
+	}
+
+	table {
+		width: 300px;
+		border:5px solid #1c4e89;
+		margin: 5px;
+		background-color: white;
+		font-family: officeSquare;
+		font-size: 26px;
+		color: #1c4e89;
+		border-radius: 5px;
+	}
+
+	td {
+		border: 1px solid #1c4e89;
+		padding: 5px;
+		color: #f79256;
+		text-align: center;
+	}
+
+	@font-face {
+			font-family: officeSquare;
+			src: url(assets/fonts/OfficeSquare-Ayvg.ttf);
+		}
+
+	.button {
+	  padding: 5px 5px;
+      font-size: 32px;
+      font-family: officeSquare;
+      color: #f2ebda;
+      cursor: pointer;
+      text-align: center;
+      background-color: #f79256;
+      border: 4px solid #1c4e89;
+      border-radius: 5px;
+      box-shadow: 3px 7px #999;
+      margin: 5px;
+	}
+
+	.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.button:hover {background-color: #00b1ca;}
+
+  .button:active {
+  background-color: #00b1ca;
+  box-shadow: 2px 2px #999;
+  transform: translate(4px, 4px);
+  } 
+
+	#leftbar {
+		background-color: #fad1a2;
+		border:5px solid #1c4e89;
+  	border-style: dashed;
+  	width: 270px;
+  	height: 600px;
+  }
+
+  #question {
+  	border-radius: 50px;
+  	padding-left: 12px;
+  	padding-right: 12px;
+  	font-size: 24px;
+  	position: absolute;
+  	top: 160px;
+  	left: 224px;
+
+  }
+
+  #question:hover + #questionText {
+  	display: block;
+  }
+
+  #questionText {
+  	position: absolute;
+  	z-index: 10;
+  	background-color: white;
+  	width: 400px;
+  	left: 100px;
+  	top: 75px;
+  }
+
+  #titleBar {
+  	background-color: #fad1a2;
+		border:5px solid #1c4e89;
+  	border-style: dashed;
+  	margin-bottom: -5px;
+  }
+
+  #mainBar {
+  	width: 1140px;
+  	height: 600px;
+  	background-color: #7dcfb6;
+		border:5px solid #1c4e89;
+  	border-style: dashed;
+  	position: absolute;
+  	bottom: 6px;
+  	right: 8px;
+  	border-top: none;
+  	border-left: none;
+  	overflow: scroll;
+  }
+
+  #addExposure {
+  	margin-top: 80px;
+  	padding-left: 36px;
+  	padding-right: 36px;
+  	position: relative;
+  }
+
+  #removeExposure {
+  	margin-top: 14px;
+  	position: relative;
+
+  }
+
+  #back {
+  	position: absolute;
+  	left: 13px;
+  	top: 155px;
+  	padding-left: 62px;
+  	padding-right: 62px;
+  }
+
+  #submit {
+  	padding-left: 11px;
+  	padding-right: 11px;
+  }
+
+
+</style>
+	</head>
+
+
+<body>
+<div id="titleBar">
+<h1 onclick="parent.location='exposureInput.html'">Exposure Input</h1>
+</div>
+<div id="leftbar">
+<button class="button" id="question">?</button>
+	<div id="questionText" class="hidden">
+		<p>An exposure is the main component of Exposure and Response Prevention Therapy. Your hierarchy is a list of all your exposures you'll be working on, listed from easiest to most challenging. It's recommended to start with level 3-4 exposures and continue doing them until the level 5-7 ones become easier and drop down to level 3-4. First enter the exposure in the exposure box, enter a rating from 1-7, and hit add exposure.</p>
+	</div>
+	<button id="back" class="button" onclick="parent.location='index.html'">Back</button>
+	<button id="addExposure" onclick="addExposure(); onClick();" class="button">Add exposure</button>
+	<button id="removeExposure" class="button">Remove exposures</button>
+	<button id="submit" class="button">Submit Exposures</button>
+</div>
+<div id="mainBar">
+</div>
+
+
+<script>
+	var clicks = 0;
+
+	function addExposure() {
+
+		var mainBar = document.getElementById("mainBar");
+
+		if (clicks == 0) {
+			var tbl = document.createElement('table');
+
+	    for (let i = 0; i < 7; i++) {
+	    const tr = tbl.insertRow();
+		    for (let j = 0; j < 3; j++) {
+		        const td = tr.insertCell();
+		        var input = document.createElement("input");
+		        td.setAttribute("id", "td" + i + j);
+		        if (i === 0 && j === 0) {
+	          	td.setAttribute('colSpan', '3');
+	          	break;
+	        	}
+
+	        	if (i === 0 && j === 0) {
+	        		break;
+	        	}
+
+	        	if (i !== 1) {
+	        		td.appendChild(input);
+	        	}
+		    }
+		  }
+
+	    mainBar.appendChild(tbl);
+	    tbl.setAttribute("id", "table")
+	    tbl.style.float = "left";
+
+	    var td00 = document.getElementById("td00");
+	    var exposureText= document.createElement("input");
+	    exposureText.setAttribute("placeholder", "type & hit enter")
+	    exposureText.setAttribute("class", "exposureText")
+	    exposureText.style.width = "230px"
+		  td00.appendChild(document.createTextNode("Exposure: "));
+	    td00.appendChild(exposureText)
+	    this.onkeydown = function(event){
+        if(event.key === 'Enter') {
+        	var text = document.createElement("span")
+        	var textNode = document.createTextNode(event.target.value);
+        	text.appendChild(textNode)
+          event.target.parentNode.appendChild(text);
+          event.target.style.display = "none";
+          text.style.color = "#1c4e89"
+          text.onclick = function(){
+          	event.target.style.display = "block";
+          	text.remove();
+          };
+        }
+    	}
+		  var td10 = document.getElementById("td10");
+		  td10.appendChild(document.createTextNode("Initial Anxiety Level"));
+		  var td11 = document.getElementById("td11");
+		  td11.appendChild(document.createTextNode("Final Anxiety Level"));
+		  var td12 = document.getElementById("td12");
+		  td12.appendChild(document.createTextNode("Elapsed Time"));
+
+		} else {
+			const node = document.getElementById("table");
+  		const clone = node.cloneNode(true);
+  		mainBar.appendChild(clone);
+  		clone.setAttribute("id", "table" + clicks);
+  		clone.style.float = "left";
+		}
+	}
+
+	function onClick() {
+		clicks += 1;
+	}
+
+	function pushExposure(text) {
+		alert(text);
+
+
+	}
+
+</script>
+
+
+</body>
+</html>
