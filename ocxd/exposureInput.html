@@ -75,6 +75,10 @@
 		text-align: center;
 	}
 
+	span {
+		color: #1c4e89;
+	}
+
 	@font-face {
 			font-family: officeSquare;
 			src: url(assets/fonts/OfficeSquare-Ayvg.ttf);
@@ -199,7 +203,7 @@
 
 <body>
 <div id="titleBar">
-<h1 onclick="parent.location='exposureInput.html'">Exposure Input</h1>
+<h1>Exposure Input</h1>
 </div>
 <div id="leftbar">
 <button class="button" id="question">?</button>
@@ -208,8 +212,8 @@
 	</div>
 	<button id="back" class="button" onclick="parent.location='index.html'">Back</button>
 	<button id="addExposure" onclick="addExposure(); onClick();" class="button">Add exposure</button>
-	<button id="removeExposure" class="button">Remove exposures</button>
-	<button id="submit" class="button">Submit Exposures</button>
+	<button id="removeExposure" class="button" onclick="removeExposures();">Remove exposures</button>
+	<button id="submit" class="button" onclick = "updateTable();">Save Exposures</button>
 </div>
 <div id="mainBar">
 </div>
@@ -217,85 +221,158 @@
 
 <script>
 	var clicks = 0;
+	var numOfTables = localStorage.getItem('numOfTables');
 
+	function displayPreviousTables() {
+		if (numOfTables >= 0) {
+			makeFirstTable();
+			var numOfTablesFinal = numOfTables - 1;
+		};
+		for (let i = 0; i < numOfTablesFinal; i++) {
+			cloneTable();
+		}
+	}
+
+	displayPreviousTables();
+	displayPreviousInputs();
+
+	
+
+	function displayPreviousInputs() {
+		var array = JSON.parse(localStorage.getItem("table0"));
+		var table = document.getElementById("table0");
+		var tds = table.getElementsByTagName('td');
+		for (i = 0; i < tds.length; i++) {
+			var span = document.createElement("span");
+			tds[i + 1].appendChild(span)
+			span.innerHTML = array[i];
+			if (span.innerHTML.length > 0) {
+				span.previousSibling.classList.add("hidden");
+			}
+			span.onclick = function(){
+				var text = event.target;
+      	event.target.previousSibling.classList.remove("hidden");
+      	event.target.previousSibling.value = text.innerHTML;
+      	event.target.previousSibling.select();
+      	text.remove();
+      };
+      span.previousSibling.onkeydown = function(event){
+      	if ( event.key === 'Enter') {
+      		updateTable();
+      	}
+      }
+		}
+	}
+ 
 	function addExposure() {
 
 		var mainBar = document.getElementById("mainBar");
 
-		if (clicks == 0) {
-			var tbl = document.createElement('table');
-
-	    for (let i = 0; i < 7; i++) {
-	    const tr = tbl.insertRow();
-		    for (let j = 0; j < 3; j++) {
-		        const td = tr.insertCell();
-		        var input = document.createElement("input");
-		        td.setAttribute("id", "td" + i + j);
-		        if (i === 0 && j === 0) {
-	          	td.setAttribute('colSpan', '3');
-	          	break;
-	        	}
-
-	        	if (i === 0 && j === 0) {
-	        		break;
-	        	}
-
-	        	if (i !== 1) {
-	        		td.appendChild(input);
-	        	}
-		    }
-		  }
-
-	    mainBar.appendChild(tbl);
-	    tbl.setAttribute("id", "table")
-	    tbl.style.float = "left";
-
-	    var td00 = document.getElementById("td00");
-	    var exposureText= document.createElement("input");
-	    exposureText.setAttribute("placeholder", "type & hit enter")
-	    exposureText.setAttribute("class", "exposureText")
-	    exposureText.style.width = "230px"
-		  td00.appendChild(document.createTextNode("Exposure: "));
-	    td00.appendChild(exposureText)
-	    this.onkeydown = function(event){
-        if(event.key === 'Enter') {
-        	var text = document.createElement("span")
-        	var textNode = document.createTextNode(event.target.value);
-        	text.appendChild(textNode)
-          event.target.parentNode.appendChild(text);
-          event.target.style.display = "none";
-          text.style.color = "#1c4e89"
-          text.onclick = function(){
-          	event.target.style.display = "block";
-          	text.remove();
-          };
-        }
-    	}
-		  var td10 = document.getElementById("td10");
-		  td10.appendChild(document.createTextNode("Initial Anxiety Level"));
-		  var td11 = document.getElementById("td11");
-		  td11.appendChild(document.createTextNode("Final Anxiety Level"));
-		  var td12 = document.getElementById("td12");
-		  td12.appendChild(document.createTextNode("Elapsed Time"));
-
+		if (numOfTables === 0) {
+			makeFirstTable();
 		} else {
-			const node = document.getElementById("table");
-  		const clone = node.cloneNode(true);
-  		mainBar.appendChild(clone);
-  		clone.setAttribute("id", "table" + clicks);
-  		clone.style.float = "left";
+			cloneTable();
 		}
+	}
+
+	function makeFirstTable() {
+		var tbl = document.createElement('table');
+
+    for (let i = 0; i < 7; i++) {
+    const tr = tbl.insertRow();
+	    for (let j = 0; j < 3; j++) {
+	        const td = tr.insertCell();
+	        var input = document.createElement("input");
+	        td.setAttribute("id", "td" + i + j);
+	        if (i === 0 && j === 0) {
+          	td.setAttribute('colSpan', '3');
+          	break;
+        	}
+
+        	if (i === 0 && j === 0) {
+        		break;
+        	}
+
+        	if (i !== 1) {
+        		td.appendChild(input);
+        	}
+	    }
+	  }
+
+    mainBar.appendChild(tbl);
+    tbl.setAttribute("id", "table" + clicks)
+    tbl.style.float = "left";
+
+    var td00 = document.getElementById("td00");
+    var exposureText= document.createElement("input");
+    exposureText.setAttribute("placeholder", "type & hit enter")
+    exposureText.setAttribute("class", "exposureText")
+    exposureText.style.width = "230px"
+	  td00.appendChild(document.createTextNode("Exposure: "));
+    td00.appendChild(exposureText)
+    this.onkeydown = function(event){
+      if ( event.key === 'Enter') {
+      	var text = document.createElement("span")
+      	var textNode = document.createTextNode(event.target.value);
+      	text.appendChild(textNode)
+        event.target.parentNode.appendChild(text);
+        event.target.style.display = "none";
+        text.style.color = "#1c4e89"
+        updateTable();
+        text.onclick = function(){
+        	event.target.style.display = "block";
+        	text.remove();
+        };
+      }
+  	}
+	  var td10 = document.getElementById("td10");
+	  td10.appendChild(document.createTextNode("Initial Anxiety Level"));
+	  var td11 = document.getElementById("td11");
+	  td11.appendChild(document.createTextNode("Final Anxiety Level"));
+	  var td12 = document.getElementById("td12");
+	  td12.appendChild(document.createTextNode("Elapsed Time"));
+	}
+
+	function cloneTable() {
+		const node = document.getElementById("table0");
+		const clone = node.cloneNode(true);
+		mainBar.appendChild(clone);
+		clone.setAttribute("id", "table" + clicks);
+		clone.style.float = "left";
 	}
 
 	function onClick() {
 		clicks += 1;
+		var mainBar = document.getElementById("mainBar")
+		numOfTables = mainBar.children.length;
+		localStorage.setItem('numOfTables', numOfTables);
 	}
 
-	function pushExposure(text) {
-		alert(text);
+	var tableData = [];
 
-
+	function updateTable() {
+		tableData = [];
+		var table = document.getElementById('table0');
+	 	for (i = 1; i < 7; i++) {
+	 		for (j=0; j < 3; j++) {
+	 			tableData.push(table.rows[i].cells[j].firstChild.value);
+	 			localStorage.setItem("table0", JSON.stringify(tableData));
+	 		}
+		}
 	}
+
+	
+
+	function removeExposures() {
+		localStorage.removeItem('numOfTables');
+		localStorage.removeItem('table0');
+	}
+
+	
+
+
+
+
 
 </script>
 
