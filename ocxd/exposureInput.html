@@ -194,6 +194,7 @@
   #submit {
   	padding-left: 11px;
   	padding-right: 11px;
+  	margin-top: 14px;
   }
 
 
@@ -220,50 +221,92 @@
 
 
 <script>
-	var clicks = 0;
-	var numOfTables = localStorage.getItem('numOfTables');
 
+
+	var clicks = 1;
+	var numOfTables = localStorage.getItem('numOfTables');
+	var tablesTotal = []
+	//i will replace these with a loop that makes the arrays i just didn't know how to do it atm
+	var table0 = "table0";
+	var table1 = "table1";
+	var table2 = "table2";
+	var table3 = "table3";
+	var table4 = "table4";
+	var table5 = "table5";
+	var tableData1 = [""];
+	var tableData2 = [""];
+	var tableData3 = [""];
+	var tableData4 = [""];
+	var tableData5 = [""];
+	var tableDataTotal = JSON.parse(localStorage.getItem("tableDataTotal")) || [];
+	tablesTotal.push(table0, table1, table2, table3, table4, table5);
+	// tableDataTotal.push(tableData1, tableData2, tableData3, tableData4, tableData5);
+
+	//displays # of tables that the user previously had up
 	function displayPreviousTables() {
 		if (numOfTables >= 0) {
 			makeFirstTable();
-			var numOfTablesFinal = numOfTables - 1;
 		};
-		for (let i = 0; i < numOfTablesFinal; i++) {
-			cloneTable();
+
+		for (let i = 1; i < numOfTables; i++) {
+			cloneTable(i)		
 		}
 	}
 
+	//table cloner!! Clones table0
+	function cloneTable(item) {
+		const node = document.getElementById("table0");
+		const clone = node.cloneNode(true);
+		mainBar.appendChild(clone);
+		clone.style.float = "left";
+		//this is just a bug catcher cuz table1 returns as null for some reason
+		if (item == null) {
+			item = 1;
+		}
+		//names table
+		clone.setAttribute("id", "table" + item);
+	}
+
+	//displays previous tables and inputs
 	displayPreviousTables();
 	displayPreviousInputs();
 
 	
-
+//takes table data and puts it into the tables that were cloned based on how many was up
 	function displayPreviousInputs() {
-		var array = JSON.parse(localStorage.getItem("table0"));
-		var table = document.getElementById("table0");
-		var tds = table.getElementsByTagName('td');
-		for (i = 0; i < tds.length; i++) {
-			var span = document.createElement("span");
-			tds[i + 1].appendChild(span)
-			span.innerHTML = array[i];
-			if (span.innerHTML.length > 0) {
-				span.previousSibling.classList.add("hidden");
+		for (let k = 0; k < numOfTables; k++) {
+			var table = document.getElementById(tablesTotal[k]);
+			var tds = table.getElementsByTagName('td');
+			//i think i just said fuck it and removed the "exposure:" part of the table alltogether but like accidentally so it's commented out
+   		// tds[0].remove();
+   		//creates span element per td to put the info in
+			for (let i = 0; i < tds.length; i++) {
+				var span = document.createElement("span");
+				tds[i + 1].appendChild(span);
+				span.innerHTML = tableDataTotal[k][i];
+				//if span contains info, hides input element before that
+				if (span.innerHTML.length > 0) {
+					span.previousSibling.classList.add("hidden");
+				}
+				//gives newly created spans onclick abilities
+				span.onclick = function(){
+					var text = event.target;
+	      	event.target.previousSibling.classList.remove("hidden");
+	      	event.target.previousSibling.value = text.innerHTML;
+	      	event.target.previousSibling.select();
+	      	text.remove();
+	      };
+	      //updates table on input enter
+	      span.previousSibling.onkeydown = function(event){
+	      	if ( event.key === 'Enter') {
+	      		updateTable();
+	      	}
+	      }
 			}
-			span.onclick = function(){
-				var text = event.target;
-      	event.target.previousSibling.classList.remove("hidden");
-      	event.target.previousSibling.value = text.innerHTML;
-      	event.target.previousSibling.select();
-      	text.remove();
-      };
-      span.previousSibling.onkeydown = function(event){
-      	if ( event.key === 'Enter') {
-      		updateTable();
-      	}
-      }
 		}
 	}
  
+ //add exposure button. makes first table and clones them
 	function addExposure() {
 
 		var mainBar = document.getElementById("mainBar");
@@ -271,10 +314,10 @@
 		if (numOfTables === 0) {
 			makeFirstTable();
 		} else {
-			cloneTable();
+			cloneTable(numOfTables);
 		}
 	}
-
+//framework for first table. i did it thru javascript bc i initially planned there to be 0 tables on first page visit btw and then I couldn't figure out how to make that work
 	function makeFirstTable() {
 		var tbl = document.createElement('table');
 
@@ -300,9 +343,9 @@
 	  }
 
     mainBar.appendChild(tbl);
-    tbl.setAttribute("id", "table" + clicks)
+    tbl.setAttribute("id", "table" + 0)
     tbl.style.float = "left";
-
+    //"exposure:"" part of the table
     var td00 = document.getElementById("td00");
     var exposureText= document.createElement("input");
     exposureText.setAttribute("placeholder", "type & hit enter")
@@ -310,6 +353,7 @@
     exposureText.style.width = "230px"
 	  td00.appendChild(document.createTextNode("Exposure: "));
     td00.appendChild(exposureText)
+    //im not gonna lie, i typed this because i ran out of ideas and it magically worked. Anyways i think this is just for the initial/cloned tables to have clickable and editable table info. Also updates table info on enter.
     this.onkeydown = function(event){
       if ( event.key === 'Enter') {
       	var text = document.createElement("span")
@@ -321,10 +365,12 @@
         updateTable();
         text.onclick = function(){
         	event.target.style.display = "block";
+        	event.target.select();
         	text.remove();
         };
       }
   	}
+  	//displays the table text that's already there (non-editable)
 	  var td10 = document.getElementById("td10");
 	  td10.appendChild(document.createTextNode("Initial Anxiety Level"));
 	  var td11 = document.getElementById("td11");
@@ -333,36 +379,34 @@
 	  td12.appendChild(document.createTextNode("Elapsed Time"));
 	}
 
-	function cloneTable() {
-		const node = document.getElementById("table0");
-		const clone = node.cloneNode(true);
-		mainBar.appendChild(clone);
-		clone.setAttribute("id", "table" + clicks);
-		clone.style.float = "left";
-	}
 
+	//i think this just helps determine the number of tables that were previously up based on counting the add exposure button clicks
 	function onClick() {
-		clicks += 1;
+		clicks++
 		var mainBar = document.getElementById("mainBar")
 		numOfTables = mainBar.children.length;
 		localStorage.setItem('numOfTables', numOfTables);
 	}
 
-	var tableData = [];
-
+//every time enter is pressed, function to update table info to localstorage
 	function updateTable() {
-		tableData = [];
-		var table = document.getElementById('table0');
-	 	for (i = 1; i < 7; i++) {
-	 		for (j=0; j < 3; j++) {
-	 			tableData.push(table.rows[i].cells[j].firstChild.value);
-	 			localStorage.setItem("table0", JSON.stringify(tableData));
-	 		}
+		for (let k = 0; k < numOfTables; k++) {
+			var table = document.getElementsByTagName("table");
+			tableDataTotal[k] = [];
+
+		 	for (let i = 1; i < 7; i++) {
+		 		for (let j = 0; j < 3; j++) {
+		 			var firstChild = table[k].rows[i].cells[j].firstChild.value
+		 			tableDataTotal[k].push(firstChild);
+		 			localStorage.setItem("tableDataTotal", JSON.stringify(tableDataTotal));
+		 		}
+			}
+
 		}
 	}
 
 	
-
+//removes tables currently up
 	function removeExposures() {
 		localStorage.removeItem('numOfTables');
 		localStorage.removeItem('table0');
