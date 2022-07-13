@@ -13,6 +13,10 @@
         background-color: #7dcfb6;
         }
 
+        html,body{
+        height:100%;
+        }
+
         h1 {
             font-family: officeSquare;
             font-size: 100px;
@@ -265,14 +269,17 @@
  
 
         #leftContainer {
-            position: absolute;
+            float: left; 
+            margin: 0px;
+            margin-left: -8px;
+            margin-top: -8px;
+            padding: 0px;
+            position: relative;
             height: 100%;
             width: 336px;
-            left: 0px;
-            top: 0px;
             background-color: #fad1a2;  
             border-right:5px solid #1c4e89;
-  					border-right-style: dashed;   
+  			border-right-style: dashed; 
         }
 
         #returnButton {
@@ -438,6 +445,23 @@
         	top: 0px;
         }
 
+        #puzzleFrame {
+            display: grid;
+            border: 2px black;
+        }
+
+        #image {
+            float: left;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -8px; 
+        }
+
+        #puzzleBox {
+            height: 100%;
+        }
+
 
 
     </style>
@@ -448,8 +472,6 @@
 
 <audio id="hoverNoise" src="assets/audio/hover.wav"></audio>
 <audio id="clickNoise" src="assets/audio/click.mp3"></audio>
-
-<div id="errorDiv"></div>
 
 <div id="questionText" class="smallScale hidden">
     <div id="textBox" class="centered">
@@ -507,10 +529,6 @@
 	<p id="expandCarat">&#8249;</p>
 </div>
 
-<div>
-	<img id="testImage">
-</div>
-
 <div id="leftContainer">
     <button class="button roundButton" onclick="showInstructions();" id="question">?</button>
     <button class="button roundButton" onclick="parent.location='index.html'" id="backButton"></button>
@@ -521,276 +539,26 @@
     <button class="button">Timer</button>
     <button class="button">Restart Puzzle</button>
     <button class="button">Hint</button>
-    <h2><input type="checkbox" class="puzzleCb"id="randomize" onclick="checkSwitch(this);" checked>  Randomize Puzzles</h2>
-    <!-- <label for="randomize">Randomize Puzzles</label> -->
-    <h2><input type="checkbox" class="puzzleCb"id="select" onclick="checkSwitch(this);">  Choose Puzzles</h2>
-    <!-- <label for="select">Choose puzzles</label> -->
+    <h2><input type="checkbox" class="puzzleCb"id="randomize" onclick="checkSwitch(this); checkBoxStatusFinder(); refreshPage();" checked>  Randomize Puzzles</h2>
+    <h2><input type="checkbox" class="puzzleCb"id="select" onclick="checkSwitch(this); checkBoxStatusFinder(); refreshPage();">  Choose Puzzles</h2>
 </div>
 
+<div id="puzzleBox">
+    <div id="puzzleFrame">
+        <img crossOrigin="anonymous" id="image">
+    </div>
 
-<script>
+    <div id="puzzlePieces">
+    </div>
+</div>
 
-    const tWords = JSON.parse(window.localStorage.getItem('tWordsJ')) || [];
-    const nWords = JSON.parse(window.localStorage.getItem('nWordsJ')) || [];
-    const tImagesSrc = JSON.parse(window.localStorage.getItem('tImagesJ')) || [];
-    const nImagesSrc = JSON.parse(window.localStorage.getItem('nImagesJ')) || [];
-    const tAudioSrc = JSON.parse(window.localStorage.getItem('tAudioJ')) || [];
-    const nAudioSrc = JSON.parse(window.localStorage.getItem('nAudioJ')) || [];
-    const tVideo = [];
-    const nVideo = [];
-    const combinedTArray = [];
-    const combinedNArray = [];
-
-    var progressdone = false
-
-    var caratStatus = "opened"
-
-    var hoverAudio = $("#hoverNoise")[0];
-    $(".button, input").mouseover(function() {
-    hoverAudio.play();
-    });
-
-    var clickAudio = $("#clickNoise")[0];
-    $(".button, input").click(function() {
-    clickAudio.play();
-    });
-
-    tWords.forEach((item, index) => {
-            combinedTArray.push("tWord");
-    });
-
-    tImagesSrc.forEach((item, index) => {
-            combinedTArray.push("tImage");
-    });
-
-    tAudioSrc.forEach((item, index) => {
-            combinedTArray.push("tAudio");
-    });
-
-    nWords.forEach((item, index) => {
-            combinedNArray.push("nWord");
-    });
-
-    nImagesSrc.forEach((item, index) => {
-            combinedNArray.push("nImage");
-    });
-
-    nAudioSrc.forEach((item, index) => {
-            combinedNArray.push("nAudio");
-    });
-
-    function updateArrays() {
-
-        tVideo.forEach((item, index) => {
-                combinedTArray.push("tVideo");
-        });
-
-        nVideo.forEach((item, index) => {
-                combinedNArray.push("nVideo");
-        });
-    }
-
-    function showInstructions() {
-        
-        document.getElementById("questionText").classList.remove("hidden"); 
-        document.getElementById("questionText").classList.remove("smallScale");
-        document.getElementById("question").style.zIndex = "0";
-        document.getElementById("backButton").style.zIndex = "0";
-        document.getElementById("expandButton").style.zIndex = "2";    
-        document.getElementById("questionText").classList.remove("scaleDown");
-        document.getElementById("questionText").classList.add("scaleUp");   
-        
-
-        setTimeout(function() {
-        document.getElementById("questionText").style.display = "block";
-        }, 3000);
-    }
-
-    function hideInstructions() {
-        document.getElementById("questionText").classList.add("scaleDown");
-        document.getElementById("questionText").classList.remove("scaleUp");
-        setTimeout(function() {
-            document.getElementById("question").style.zIndex = "10";
-            document.getElementById("questionText").classList.add("hidden");
-            document.getElementById("questionText").classList.add("smallScale");
-            document.getElementById("backButton").style.zIndex = "10";
-            document.getElementById("expandButton").style.zIndex = "5"; 
-        }, 2000);
-    }
-
-    function hideStart() {
-        document.getElementById("start").classList.add("fadeOut");
-        setTimeout(function() {
-            document.getElementById("start").classList.add("hidden");
-        }, 2000);
-    };
-
-    function determineStart() {
-        if (tImagesSrc.length !== 0 || tVideo.length !==0) {
-            hideStart();
-            beginTraining();
-        } else {
-            alert("Insufficient trigger images/videos. Please enter some trigger images in the Triggers List and/or upload trigger videos on this page.")
-        }
-    }
-
-    function showVideos() {
-        document.getElementById("videoTriggers").classList.remove("hidden"); 
-        document.getElementById("videoTriggers").classList.remove("smallScale");
-        document.getElementById("question").style.zIndex = "0";
-        document.getElementById("backButton").style.zIndex = "0";    
-        document.getElementById("videoTriggers").classList.remove("scaleDown");
-        document.getElementById("videoTriggers").classList.add("scaleUp");
-    }
-
-    function hideVideos() {
-        document.getElementById("videoTriggers").classList.add("scaleDown");
-        document.getElementById("videoTriggers").classList.remove("scaleUp");
-        setTimeout(function() {
-            document.getElementById("question").style.zIndex = "10";
-            document.getElementById("videoTriggers").classList.add("hidden");
-            document.getElementById("videoTriggers").classList.add("smallScale");
-            document.getElementById("backButton").style.zIndex = "10";
-        }, 2000);
-    }
-
-// advances progress bar if answer was correct, determines if training is done
-
-    function progress() {
-        var v1=document.getElementById("progress").value;
-        if (v1 < 199) {
-            document.getElementById("progress").value= v1 + 1;
-        }
-
-        else {
-            document.getElementById("progress").value= v1 + 1;
-            progressdone = true
-            finishTraining();
-        }
-    };
-
-    function finishTraining() {
-        document.getElementById("displayedMedia").style.visibility = "hidden";
-        document.getElementById("letter").style.visibility = "hidden";
-
-        document.getElementById("finished").classList.remove("hidden");
-        document.getElementById("finished").classList.add("fadeIn");
-    }
-
- 
-    //tVideos
-
-    function redrawTVideo(file) {
-        const tVideoDiv = document.getElementById('tVideoDiv')
-        const vid = document.createElement('video');
-        vid.controls = 'controls';
-        vid.src = URL.createObjectURL(file);
-        vid.style.width = "400px"
-        vid.style.margin = "5px"
-        vid.style.marginTop = "30px"
-        tVideoDiv.appendChild(vid);
-
-    }
-
-    function addTVideoAndRedraw() {
-      const tVideoInput = document.getElementById('tVideoInput');
-      if (tVideoInput.files.length === 1) {
-        addTVideo(tVideoInput.files[0]);
-        redrawTVideo(tVideoInput.files[0])
-      } else {
-        alert('No file selected. Select a file and try again.');
-      }
-    }
-
-    function addTVideo(TVideoBlob) {
-      tVideo.push(TVideoBlob);
-    }
-
-    const tVideoButton = document.getElementById('tVideoButton');
-    tVideoButton.addEventListener('click', addTVideoAndRedraw);
-
-    //nVideos
-
-    function redrawNVideo(file) {
-        const nVideoDiv = document.getElementById('nVideoDiv')
-        const vid = document.createElement('video');
-        vid.controls = 'controls';
-        vid.src = URL.createObjectURL(file);
-        vid.style.width = "400px"
-        vid.style.margin = "5px"
-        vid.style.marginTop = "30px"
-        nVideoDiv.appendChild(vid);
-
-    }
-
-    function addNVideoAndRedraw() {
-      const nVideoInput = document.getElementById('nVideoInput');
-      if (nVideoInput.files.length === 1) {
-        addNVideo(nVideoInput.files[0]);
-        redrawNVideo(nVideoInput.files[0]);
-      } else {
-        alert('No file selected. Select a file and try again.');
-      }
-    }
-
-    function addNVideo(NVideoBlob) {
-      nVideo.push(NVideoBlob);
-    }
-
-    const nVideoButton = document.getElementById('nVideoButton');
-    nVideoButton.addEventListener('click', addNVideoAndRedraw);
-
-    function showHideSide() {
-    	var carat = document.getElementById("expandCarat")
-    	var leftContainer = document.getElementById("leftContainer")
-    	var expandButton = document.getElementById("expandButton")
-    	if (caratStatus == "opened") {
-    		carat.innerHTML = "&#8250;";
-    		caratStatus = "closed";
-    		leftContainer.classList.add("hidden");
-    		expandButton.style.left = "0px"
+<div id="errorDiv"></div>
 
 
-    	} else {
-    		carat.innerHTML = "&#8249;"
-    		caratStatus = "opened"
-    		leftContainer.classList.remove("hidden");
-    		expandButton.style.left = "330px"
-    	}
-    }
-
-    function checkSwitch(obj) {
-    	var cbs = document.getElementsByClassName("puzzleCb");
-    	for (var i = 0; i < cbs.length; i++) {
-        cbs[i].checked = false;
-    	}
-    	obj.checked = true;
-    }
-
-    var image = new Image();
-		image.onload = cutImageUp;
-		image.src = tImagesSrc[Math.floor(Math.random() * tImagesSrc.length)];
-
-		function cutImageUp() {
-			var imagePieces = [];
-			x = 4
-			y = 4
-			var canvas = document.createElement('canvas');
-      canvas.width = "200px";
-      canvas.height = "200px";
-      var context = canvas.getContext('2d');
-      context.drawImage(image, );
-		}
-
-    
-
-    // load one piece onto the page
-    var anImageElement = document.getElementById('testImage');
-    anImageElement.src = imagePieces[0];
-
-
+<script src="puzzleGameJS.js">
 
 </script>
+
 
 
 </body>
