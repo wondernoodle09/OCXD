@@ -40,6 +40,8 @@
     img.style.maxWidth = "60vw"
     img.style.maxHeight = "60vh"
 
+    img.crossOrigin="anonymous"
+
     function refreshPage() {
         location.reload();
     }
