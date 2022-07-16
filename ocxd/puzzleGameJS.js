@@ -15,14 +15,26 @@
     var caratStatus = "opened"
 
     var hoverAudio = $("#hoverNoise")[0];
-    $(".button, input, #expandButton").mouseover(function() {
+    $(".button, .slicedImages, input, #expandButton").mouseover(function() {
     hoverAudio.play();
     });
+
+    function playHover() {
+        hoverAudio.play();
+
+        if (hoverAudio.duration > 0) {
+            hoverAudio.play();
+        }
+    }
 
     var clickAudio = $("#clickNoise")[0];
     $(".button, input, #expandButton").click(function() {
     clickAudio.play();
     });
+
+    function playClick() {
+        clickAudio.play();
+    }
 
     var randomizeCB = document.getElementById("randomize");
     var selectCB = document.getElementById("select");
@@ -37,10 +49,72 @@
     // var img = new Image();
     var img = document.getElementById("image");
 
+    var width
+    var height
+
+    var numRowsCols = 12;
+
+    var puzzleBox = document.getElementById("puzzleBox")
+ 
+    var pieceWidth = (863/numRowsCols) - 1
+    var pieceHeight = 35
+    
+    
+
+    puzzleBox.style.width = (screen.width - 336) + "px"
+    puzzleBox.classList.add("outsideDrop")
+    puzzleBox.setAttribute("ondrop", "drop(event)");
+    puzzleBox.setAttribute("ondragover", "allowDrop(event)");
+    puzzleBox.setAttribute("onmouseover", "playHover();")
+    puzzleBox.setAttribute("onclick", "onClick(event);")
+    puzzleBox.setAttribute("ondragend", "dragEnd(event);")
+
     img.style.maxWidth = "60vw"
     img.style.maxHeight = "60vh"
 
-    img.crossOrigin="anonymous"
+    img.onload = function() {
+    width = this.Width;
+    height = this.Height;
+    var frame = document.createElement("table");
+    frame.setAttribute("id", "puzzleFrame");
+    frame.style.width = width + "px";
+    frame.style.height = height + "px";
+    frame.classList.add("dropZone");
+    frame.setAttribute("cellspacing", "0")
+    frame.setAttribute("cellpadding", "0")
+    frame.setAttribute("border", "0")
+    var pos = img.getBoundingClientRect();
+    frame.style.left = (pos.left - 336) + "px"
+    var puzzleBox = document.getElementById("puzzleBox");
+    puzzleBox.appendChild(frame);
+        for (let i = 0; i < numRowsCols; i++) {
+            const tr = frame.insertRow();
+            for (let j = 0; j < numRowsCols; j++) {
+                const td = tr.insertCell();
+                // var remainderX = img.width % numRows
+                // var remainderY = img.height % numRows
+                td.style.border = "1px solid black";
+                td.style.margin = "0px";
+                td.style.padding = "0px";
+                td.style.width = pieceWidth + "px";
+                td.style.height = pieceHeight + "px";
+                td.style.maxWidth = pieceWidth + "px";
+                td.style.maxHeight = pieceHeight + "px";
+                td.classList.add("dropZone");
+                td.setAttribute("ondrop", "drop(event)")
+                td.setAttribute("ondragover", "allowDrop(event)")
+                td.setAttribute("ondragenter", "dragEnter(event)")
+                td.setAttribute("draggable", "true");
+                td.setAttribute("ondragstart", "drag(event)");
+                td.setAttribute("ondrop", "drop(event)");
+                td.setAttribute("onclick", "onClick(event);")
+                td.setAttribute("id", "td" + i + j);
+            }
+        }
+    }
+
+    
+
 
     function refreshPage() {
         location.reload();
@@ -236,11 +310,28 @@
     	var carat = document.getElementById("expandCarat")
     	var leftContainer = document.getElementById("leftContainer")
     	var expandButton = document.getElementById("expandButton")
+        var puzzleFrame = document.getElementById('puzzleFrame')
+        var puzzleBox = document.getElementById('puzzleBox')
+        var popup = document.getElementsByClassName('popup')
     	if (caratStatus == "opened") {
     		carat.innerHTML = "&#8250;";
     		caratStatus = "closed";
     		leftContainer.classList.add("hidden");
     		expandButton.style.left = "0px"
+            puzzleBox.style.width = "100%"
+            puzzleFrame.style.left = "50%"
+            puzzleFrame.style.transform = "translateX(-50%)";
+
+            for (let i=0; i<popup.length;i++) {
+                popup[i].classList.remove("totalCenter");
+                popup[i].classList.remove("popup");
+                popup[i].style.removeProperty("top");
+                popup[i].style.removeProperty("left");
+                popup[i].style.removeProperty("right");
+                popup[i].style.removeProperty("transform");
+                popup[i].classList.add("totalCenter");
+            }
+
 
 
     	} else {
@@ -248,6 +339,14 @@
     		caratStatus = "opened"
     		leftContainer.classList.remove("hidden");
     		expandButton.style.left = "330px"
+            puzzleBox.style.width = (screen.width - 336) + "px"
+
+            for (let i=0; i<popup.length;i++) {
+                popup[i].style.display = ""
+                popup[i].style.justifyContent = ""
+                popup[i].style.right = "252px;"
+            }
+
     	}
     }
 
@@ -288,22 +387,21 @@
             selectCB.checked = true;
             randomizeCB.checked = false;
         }
+
     };
 
     //puzzle piece maker
+
+    var slicedImage = document.getElementsByClassName("slicedImages");
 
     function startPuzzle() {
         split();
     }
 
     function split() {
-        var numRows = 8;
-        var numCols = 8;
-        var pieceWidth = img.width / numCols;
-        var pieceHeight = img.height / numRows;
 
-        for (var x = 0; x < numRows; x++) {
-            for (var y = 0; y < numCols; y++) {
+        for (var x = 0; x < numRowsCols; x++) {
+            for (var y = 0; y < numRowsCols; y++) {
 
                 canvas.width = pieceWidth;
                 canvas.height = pieceHeight;
@@ -318,17 +416,201 @@
 
             //for test div
 
-        for (var i = 0; i < numRows*numCols; i++) {
-            var slicedImage = document.createElement('img')
+        for (var i = 0; i < numRowsCols*numRowsCols; i++) {
+            var slicedImage = document.createElement('img');
+            var puzzleBox = document.getElementById("puzzleBox")
+            var left = Math.random() * puzzleBox.width;
+            var top = Math.random() * puzzleBox.height;
             slicedImage.src = parts[i];
-            var div = document.getElementById('puzzlePieces');
-            div.appendChild(slicedImage);
+            slicedImage.setAttribute("class", "slicedImages");
+            slicedImage.setAttribute("id", i);
+            slicedImage.style.position = "absolute"
+            slicedImage.style.left = Math.abs((Math.random() * puzzleBox.clientWidth) - pieceWidth) + "px";
+            slicedImage.style.top = Math.abs((Math.random() * puzzleBox.clientHeight) - pieceHeight) + "px";
+            slicedImage.setAttribute("draggable", "true");
+            slicedImage.setAttribute("ondragstart", "drag(event)");
+            slicedImage.setAttribute("ondrop", "drop(event)");
+            slicedImage.setAttribute("ondragover", "allowDrop(event)");
+            slicedImage.setAttribute("onmouseover", "playHover();")
+            slicedImage.setAttribute("onclick", "onClick(event);")
+            slicedImage.setAttribute("ondragend", "dragEnd(event);")
+            // slicedImage.setAttribute("ondragenter", "dragEnter(event);")
+            var pos = slicedImage.getBoundingClientRect();
+            slicedImage.style.zIndex = (Math.random()*10);
+            puzzleBox.appendChild(slicedImage);
         }
     }
 
-    //background grid maker
+    // drag settings of pieces
 
-    var frame = document.getElementById("puzzleFrame")
+    var pieceSrc
+    var id
+    var firedOn
+    var enteredId
+    var piece
+    var test
+    let offsetX;
+    let offsetY;
+    var mouseX;
+    var mouseY;
+    var originalPosX
+    var originalPosY
+
+    function drag(event) {
+        id = event.target.id
+        event.dataTransfer.setData("text", id);
+        event.dataTransfer.setData("url", event.target.src);
+        piece = document.getElementById(id);
+        event.dataTransfer.setData("background", event.target.src);
+        // piece.style.display = "none"
+        event.target.style.border = "3px"
+        // event.target.classList.add('hideDrag');
+        var pos = event.target.getBoundingClientRect();
+        originalPosX = pos.left
+        originalPosY = pos.top
+        playClick();
+    }
+
+    function dragEnd(event) {
+        // event.target.classList.add('hideDrag');
+        offsetX = event.target.getBoundingClientRect().left
+        offsetY = event.target.getBoundingClientRect().top
+       
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function dragEnter(event) {
+        event.preventDefault();
+        // console.log(event)
+        if (event.target.classList.contains("dropZone")) {
+            firedOn = event.srcElement.id;
+            test = event.target
+            enteredId = getIdNumber(firedOn);
+            piece = event.srcElement
+            // piece.style.width = (document.getElementById(firedOn).clientWidth) + "px"
+            // piece.style.height = (document.getElementById(firedOn).clientHeight) + "px"
+        }
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text");
+        var url = event.dataTransfer.getData("url");
+        piece = document.getElementById(data);
+        var ident = event.dataTransfer.getData("id");
+        var td = event.target.id
+        var status = event.dataTransfer.getData("status");
+        var rect = event.target.getBoundingClientRect();
+        var posX = event.pageX - rect.left
+        var posY =  event.pageY - rect.top
+        var x = event.clientX;
+        var y = event.clientY;
+        // var tdPosition = document.getElementById(td).getBoundingClientRect();
+        piece.style.position = "relative"
+        piece.style.removeProperty('left');
+        piece.style.removeProperty('top');
+        piece.classList.add("dropZone");
+        clickAudio.play();
+
+        if (event.target.tagName !== 'td') {
+            piece.style.border = "3px solid black;"
+            piece.style.position = "absolute"
+            var translateLeft = posX - originalPosX;
+            var translateUp = posY - originalPosY;
+            console.log(originalPosX)
+            // piece.style.left = originalPosX + (posX - translateLeft) + "px";
+            // piece.style.top = originalPosY + (posY - translateUp) + "px";
+            return;
+        }
+
+        // if (event.target.parentElement.firstChild.length > 0) {
+        //     console.log(event.target.parentElement)
+        //     event.target.remove();
+
+            // event.target.parentElement.appendChild(piece);
+        //     return;
+        // }
+        // if(document.getElementById(firedOn).childNodes.length > 0 || document.getElementById(firedOn).nodeName == "img") {
+        //     // $("#" + firedOn + "img")
+        // }
+        // piece.style.width = (document.getElementById(firedOn).clientWidth) + "px"
+        // piece.style.height = (document.getElementById(firedOn).clientHeight) + "px"
+        // console.log(x + "," + y)
+        // console.log(tdPosition.left + "," + tdPosition.top)
+        var img2 = new Image();
+        img2.src = parts[1];
+        // $('#td' + enteredId).css("background-image", "url('" + img.src + "')")
+        document.getElementById(firedOn).appendChild(piece);
+        document.getElementById(firedOn).appendChild(piece);
+        // piece.style.backgroundImage = ""
+        var dataSrc = document.getElementById(data).src
+        
+        // for (var i = 0; i = tds.length; i++) {
+        //     tds[i].style.backgroundImage = "url(" + parts[i] + ")"
+        // }
+    }
+
+    function onClick(event) {
+        event.preventDefault();
+    }
+
+    function getIdNumber(obj) {
+        var string = obj.toString();
+        var newstring = string.replace(/td/, '');
+        return newstring
+    }
+
+    document.addEventListener('mousemove', mouse);
+
+    function mouse(e) {
+        mouseX = e.screenX
+        mouseY = e.screenY
+    }
+    
+    // Difficulty Settings
+
+
+    function checkDifficulty(obj) {
+        var cbs = document.getElementsByClassName("difficultyCb");
+        for (var i = 0; i < cbs.length; i++) {
+        cbs[i].checked = false;
+        }
+        obj.checked = true;
+    }
+
+
+    function openDifficulty() {
+
+    }
+
+    function switchDifficulty(difficulty) {
+
+        //  if (randomizeCB.checked == true) {
+        //     checkBoxStatus = "randomize"
+        //     localStorage.setItem("checkBoxStatus", checkBoxStatus);
+        // } else if (selectCB.checked == true) {
+        //     checkBoxStatus = "select"
+        //     localStorage.setItem("checkBoxStatus", checkBoxStatus);
+        // } else {
+        //     checkBoxStatus = "randomize"
+        //     localStorage.setItem("checkBoxStatus", checkBoxStatus);
+        // }
+        
+    }
+
+    function showPopup(value) {
+        document.getElementById(value).classList.remove("hidden");
+        document.getElementById(value).classList.add("tilt-in-fwd-tl");
+    }
+
+    function hidePopup(value) {
+        document.getElementById(value).classList.add("tilt-back-fwd-tl");
+    }
+
+
 
 
 
