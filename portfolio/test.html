@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style type="text/css">
+
+	html {
+  scroll-behavior: smooth;
+	}
+
+	body {
+  	background-color: white;
+	}
+
+	h1 {
+		font-family: cocomat;
+		font-size: 60px;
+		margin: 0px;
+    cursor: pointer;
+	}
+
+	h2 {
+		font-family: cocomat;
+		font-size: 32px;
+		margin: 0px;
+	}
+
+	p {
+		font-family: cocomat;
+		font-size: 20px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	button {
+		font-weight: bold;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		background-color: #fee0e8;
+		border: 2px solid black;
+		font-family: forzanLight;
+		font-size: 20px;
+		border-radius: 4px;
+		padding: 16px;
+		box-shadow: 3px 6px black;
+		transition: background-color .25s ease-in-out;
+		-moz-transition: background-color .25s ease-in-out;
+		-webkit-transition: background-color .25s ease-in-out;
+	}
+
+	button:hover {
+		background-color: #FF8BAC;
+		cursor: pointer;
+	}
+
+
+	a {
+		font-family: forzanLight;
+		font-size: 20px;
+	}
+
+	ul {
+	  	list-style-type: none;
+		 	margin: 0;
+	  	padding: 0;
+	  	overflow: hidden;
+	  	float:right;
+	  	border-top: 1px solid black;
+	  	border-left: 1px solid black;
+	  	border-right: 1px solid black;
+
+	}
+
+	li {
+	  	float: right;
+
+	}
+
+	li a, .dropbtn {
+		  display: inline-block;
+			color: black;
+		  text-align: center;
+		  padding: 14px 16px;
+		  text-decoration: none;
+		  transition: background-color .25s ease-in-out;
+		-moz-transition: background-color .25s ease-in-out;
+		-webkit-transition: background-color .25s ease-in-out;
+	}
+
+	li a:hover, .dropdown:hover .dropbtn {
+	  	background-color: #FF8BAC;
+	  	cursor: pointer;
+	}
+
+	li.dropdown {
+	  	display: inline-block;
+	}
+
+	hr {
+		border: .5px solid black;
+		width: 500px;
+		float: left;
+	}
+
+	* {box-sizing:border-box}
+
+	@font-face {
+			font-family: forzanLight;
+			src: url(assets/fonts/ForzanLight-ALWAA.ttf);
+		}
+
+	@font-face {
+			font-family: cocomat;
+			src: url(/Users/annikachavez/Documents/code/portfolio/assets/fonts/CocomatLight-ZXY3.ttf);
+		}
+
+	.topBar {
+		position: absolute;
+		width: 100%;
+		margin: 0px;
+		padding: 0px;
+		border-bottom: 1px solid black;
+	  background-color: #fee0e8; 
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #fee0e8;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 10;
+		border: 1px solid black;
+	}
+
+	.dropdown-content a {
+		font-family: cocomat;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		text-align: left;
+	}
+
+	.dropdown-content a:hover {background-color: #FF8BAC}
+
+	.dropdown:hover .dropdown-content {
+		display: block;
+	}
+
+	.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+	.downArrow {
+		position:relative;
+		bottom: 6px;
+		-webkit-transform: scale(1.5, 1);
+	  -moz-transform: scale(1.5, 1);
+	  -o-transform: scale(1.5, 1);
+	  transform: scale(1.5, 1);
+	}
+
+	.barArrows {
+		margin-left: 10px;
+		display: inline-block;
+	}
+
+	.panel {
+		position: relative;
+		border:1px solid black;
+		height: 100%;
+		width: 100%;
+		margin-bottom: 50px;
+		box-shadow: 5px 5px 5px #c4cacf;
+	}
+
+	.pagePanel {
+		float: left;
+		height: 700px;
+	}
+
+
+	.subpanel {
+		position: relative;
+		width: 50%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.subpanelTitle {
+		margin-right: 5px;
+		margin-left: 5px;
+		font-family: forzanLight;
+		font-size: 20px;
+		padding: 20px;
+		text-align: right;
+	}
+
+	.prev {
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.next {
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.arrow {
+		position: relative;
+		font-size: 40px;
+		-webkit-text-stroke: 1px white;
+		cursor: pointer;
+	}
+
+	.arrowArea {
+		position: absolute;
+		cursor: pointer;
+		transition: all .2s ease-in-out;
+		width: 60px;
+		height: 45px;
+		bottom: 0px;
+		right: 0px;
+	}
+
+	.arrowArea:hover {
+		transform: scale(1.1); 
+	}
+
+	.circles {
+		width: 45px;
+		height: auto;
+		position: absolute;	
+		top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+  	z-index: 30;
+	}
+
+	.circleButton {
+		border-radius: 50px;
+		width: 40px;
+		height: 40px;
+		margin-top: 6px;
+		margin-bottom: 6px;
+/*		margin-left: -20px;*/
+		z-index: 10;
+		padding: 6px;
+	}
+
+
+	.slideUp {
+    animation: slideUpFade .3s ease-in;
+	}
+
+	.subpanelText {
+		position: absolute;	
+		top: 50%;
+  	transform: translateY(-50%);
+  	padding: 60px;
+  	z-index: 10;
+	}
+
+	@keyframes slideUpFade {
+
+		50% {
+			opacity: 0;
+		}
+
+		100% {
+			top: -50px;
+			opacity: 0;
+		}
+	}
+
+	.slideUpFromDown {
+    animation: slideUpDownFade .3s ease-out;
+	}
+
+	.subpanelHR {
+		width: 580px;
+	}
+
+	@keyframes slideUpDownFade {
+
+		0% {
+			opacity: 0;
+			transform: translateY(100%);
+		}
+
+		50% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(-50%);
+		}
+	}
+
+	#scrollDown {
+		bottom: 16px;
+		position: fixed;
+		left: 50%;
+    transform: translate(-50%, 0) scale(1.5, 1);
+		text-align: center;
+		font-size: 90px;
+		margin: 0px;
+		z-index: 10;
+		color: black;
+		text-decoration: none;
+		transition: all .2s ease-in-out;
+	}
+
+	#scrollDown:hover {
+		transform: translate(-50%, 0) scale(1.6, 1.1);
+	}
+
+	#centerWords {
+		padding-top: 280px;
+		padding-bottom: 180px;
+	}
+
+	#geometric {
+		position: absolute;
+		width: 570px;
+		height: 570px;
+		z-index: -5;
+		bottom: 0px;
+		right: 30px;
+		opacity: .7;
+	}
+
+	#titlePanel {
+		padding-left: 30px;
+		padding-right: 30px;	
+	}
+
+	#workImagesSP {
+		float: left;
+		display: flex;
+    align-items: center;
+    border-right: .5px solid black;
+	}
+
+	#workDescSP{
+		float: right;
+		text-align: left;
+		background-color: #9a8dc7;
+		border-left: .5px solid black;
+	}
+
+	#workImage {
+		width: 90%;
+		border: 2px solid black;
+		border-radius: 8px;
+	}
+
+	#cb2 {
+		background-color: #9cbded
+	}
+
+	#cb2:hover {
+		background-color: #4A88E2;
+	}
+
+	#cb3 {
+		background-color: #afedef;
+	}
+
+	#cb3:hover {
+		background-color: #14C3CB;
+	}
+
+	#cb4 {
+		background-color: #ffe5c4;
+	}
+
+	#cb4:hover {
+		background-color: #FFBA62;
+	}
+
+	#cb5 {
+		background-color: #ECFF9F;
+	}
+
+	#cb5:hover {
+		background-color: #B7DB25;
+	}
+
+	#upArrowArea {
+		bottom: 66px;
+		right: 18px;
+	}
+
+	#downArrowArea {
+		bottom: 16px;
+		right: 18px;
+	}
+
+	#workPanel2 {
+		display: none;
+	}
+
+</style>
+
+
+<body>
+
+	<ul class="topBar">
+	  <li class="dropdown">
+	  	<a class="dropbtn">Contact<label class="downArrow barArrows">&#8964;</label></a>
+			<div class="dropdown-content">
+				<a>Direct Contact</a>
+				<a>Social Media</a>
+				<a>Other Links</a>
+			</div>
+	  </li>
+	  <li class="dropdown">
+	  	<a class="dropbtn">Resume<label class="downArrow barArrows">&#8964;</label></a>
+	  	<div class="dropdown-content">
+				<a>View Resume</a>
+			</div>
+	  </li>	  
+	  <li class="dropdown">
+	    <a class="dropbtn">Miscellaneous<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Piano Sheet Music & Tutorials</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a class="dropbtn">Art<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Digital Art</a>
+	      <a>Graphic Design</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a class="dropbtn">About<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Summary</a>
+	      <a>Education</a>
+	    </div>
+	  </li>
+	  <li class="dropdown"><a>Work<label class="downArrow barArrows">&#8964;</label></a>
+	  	<div class="dropdown-content">
+	      <a>OCxD</a>
+	       <a>Animal Crossing Weather Bot</a>
+	      <a>Dog Gacha</a>
+	      <a>Dog Visual Novel Game</a>
+	      <a>Other Minor Works</a>
+	    </div>
+	  </li>
+	</ul>
+
+	<div class="panel" id="titlePanel">
+		<img id="geometric" src="assets/images/geometricalPort.png" alt="geometrical design">
+		<div id="centerWords">
+			<h1 onclick="parent.location='index.html'">Annika Chavez</h1><hr><br>
+			<h2>UI design, web design, app creation, and graphic design.</h2>
+		</div>
+	<a id="scrollDown" class="downArrow" href="#work">&#8964;</a>
+	</div>
+
+	<div class="panel pagePanel" id="work">
+
+		<div class="circles">
+			<button id="cb1" class="circleButton" onclick="changeWork(this.id)">1</button>
+			<button id="cb2" class="circleButton" onclick="changeWork(this.id)">2</button>
+			<button id="cb3" class="circleButton" onclick="changeWork(this.id)">3</button>
+			<button id="cb4" class="circleButton" onclick="changeWork(this.id)">4</button>
+			<button id="cb5" class="circleButton" onclick="changeWork(this.id)">5</button>
+		</div>
+
+		<div class="subpanel" id="workImagesSP">
+			<img id="workImage" class="center" src="assets/images/OCxDexampleOne.png"alt="Work Image">
+		</div>
+
+		<div class="subpanel" id="workDescSP">
+
+			<div class="topBar">
+				<h2 class="subpanelTitle">Work</h2>
+			</div>
+
+			<div class="subpanelText" id="workPanel1">
+				<h1 id="workDescTitle"></h1>
+				<hr class="subpanelHR"><br>
+				<p id="workDescDesc"></p>
+			</div>
+
+
+			<div class="subpanelText" id="workPanel2">
+				<h1 id="workDescTitle2"></h1>
+				<hr class="subpanelHR"><br>
+				<p id="workDescDesc2"></p>
+			</div>
+
+				<button class="workSlides EFTC">Link to web app <i class="fa fa-external-link"></i></button>
+		</div>
+
+			<div id="upArrowArea" class="arrowArea">
+				<a class="prev">Prev<label class="arrow">&#8593;</label></a>
+			</div>
+
+			<div id="downArrowArea" class="arrowArea">
+  			<a class="next">Next<label class="arrow">&#8595;</label></a>
+  		</div>
+
+	</div>
+
+	<div class="panel pagePanel" id="about">
+		<h1>About</h1>
+	</div>
+
+	<div class="panel pagePanel" id="art">
+		<h1>Art</h1>
+	</div>
+
+	<div class="panel pagePanel" id="resume">
+		<h1>Miscellaneous</h1>
+	</div>
+
+	<div class="panel pagePanel" id="work">
+		<h1>Resume</h1>
+	</div>
+
+	<div class="panel pagePanel" id="contact">
+		<h1>Contact</h1>
+	</div>
+
+
+<script type="text/javascript">
+
+	//screenheight stuff
+
+	let screenHeight = window.innerHeight;
+	screenHeight = screenHeight * .98
+	const panels = document.getElementsByClassName("panel");
+	for (let i = 0; i < panels.length; i++) {
+  	panels[i].style.height =  screenHeight + "px";
+	}
+
+	//Work slide stuff
+
+
+		//Different Slide Words
+
+	const titleEFTC = "OCxD: EF Training Classic";
+	const titleACWB = "Animal Crossing Weather Bot";
+	const titleDG = "Dog Gacha";
+	const titleDVNG = "Dog Visual Novel Game";
+	const titleOMW = "Other Minor Works";
+
+	const descEFTC = "Inspired by an app used for treatment in an OCD treatment center, EF Training Classic is an Exposure and Response Therapy based tool that can be used to improve OCD symptoms. EF Training Classic is a part of a bigger project in progress, OCxD. OCxD is a web app equipped with various Exposure and Response Therapy based tools and resources used aid someone in treating their OCD.";
+	const descACWB = "This is about the Animal Crossing Weather Bot.";
+	const descDG = "This is about the Dog Gacha.";
+	const descDVNG = "This is about the Dog Visual Novel Game.";
+	const descOMW = "This is about other minor works.";
+
+		//displays first slide automatically
+
+	var workPanel1Theme = "EFTC";
+	var workPanel2Theme;
+	var slideNum = 1;
+	var newSlideNum;
+
+	document.getElementById("workDescTitle").innerHTML = titleEFTC;
+	document.getElementById("workDescDesc").innerHTML = descEFTC;
+
+	//After clicking, assigns workPanel2 Theme to workPanel2 (next clicked theme);
+
+	function changeWork(currentId) {
+
+		switch(currentId) {
+			case "cb1":
+				document.getElementById("workDescTitle2").innerHTML = titleEFTC;
+				document.getElementById("workDescDesc2").innerHTML = descEFTC;
+				newSlideNum = 1;
+				break;
+			case "cb2":
+				document.getElementById("workDescTitle2").innerHTML = titleACWB;
+				document.getElementById("workDescDesc2").innerHTML = descACWB;
+				newSlideNum = 2;
+				break;
+			case "cb3":
+				document.getElementById("workDescTitle2").innerHTML = titleDG;
+				document.getElementById("workDescDesc2").innerHTML = descDG;
+				newSlideNum = 3;
+				break;
+			case "cb4":
+				document.getElementById("workDescTitle2").innerHTML = titleDVNG;
+				document.getElementById("workDescDesc2").innerHTML = descDVNG;
+				newSlideNum = 4;
+				break;
+			case "cb5":
+				document.getElementById("workDescTitle2").innerHTML = titleOMW;
+				document.getElementById("workDescDesc2").innerHTML = descOMW;
+				newSlideNum = 5;
+				break;
+		}
+
+		switchSlides();
+
+	};
+
+	//changes workPanel2 to workPanel1
+
+	function switchSlides() {
+
+	};
+
+
+
+
+
+
+
+
+	// assigns currentId to the clicked button or arrow
+
+	function changeWork(currentId) {
+
+		//changes values from previous slide to next slide
+
+		setTimeout(slidePerformance, 300);
+
+		function slidePerformance() {
+
+			switch(currentId) {
+				case "cb1":
+					currentWork = "EFTC"
+					newSlideNum = 1
+					break;
+				case "cb2":
+					currentWork = "ACWB"
+					newSlideNum = 2
+					break;
+				case "cb3":
+					currentWork = "DG"
+					newSlideNum = 3
+					break;
+				case "cb4":
+					currentWork = "DVNG"
+					newSlideNum = 4
+					break;
+				case "cb5":
+					currentWork = "OMW"
+					newSlideNum = 5
+					break;
+			}
+
+		//displays newly assigned currentId slide text
+
+		if (newSlideNum < slideNum || slideNum == 1 && newSlideNum == 5) {
+			slideAllDown();
+		} else {
+			slideAllUp();
+		}
+
+		//removes previous slide
+	}
+};
+
+		slides upwards
+
+	function slideAllUp() {
+
+		const workWords = document.getElementsByClassName(currentWork);
+		const workSlides = document.getElementsByClassName("workSlides");
+
+		// slides previous text up
+
+		$(document).ready(function() {
+      $('#subpanelText').addClass('slideUp');
+      $('#subpanelText').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+      	$(this).removeClass('slideUp').delay(300);
+      });
+    });
+
+    //switches removes previous text
+
+    setTimeout(function(){
+			for (let i = 0; i < workSlides.length; i++) {
+	    	workSlides[i].style.display = "none";
+			}
+		},290);
+
+		//displays new text
+
+		for (let i = 0; i < workWords.length; i++) {
+
+  		// $(document).ready(function() {
+	    //   $('#subpanelText').addClass('slideUpFromDown');
+	    //   $('#subpanelText').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+	    //   	$(this).removeClass('slideUpFromDown').delay(600);
+	    //   });
+    	// });
+
+    	setTimeout(function(){
+	    	workWords[i].style.display = "block";
+	    	document.getElementById("subpanelHR").style.display = "block";
+			},600);
+		}
+
+	};
+
+	//slides downwards
+
+	function slideAllDown() {
+
+		const workWords = document.getElementsByClassName(currentWork);
+
+		alert("slideDown");
+	};
+
+	// arrows
+
+	document.getElementById("upArrowArea").addEventListener("click", subtractSlideNum);
+	document.getElementById("downArrowArea").addEventListener("click", addSlideNum);
+
+	function subtractSlideNum() {
+		if (slideNum == 1) {
+			slideNum = 5;
+		} else {
+			slideNum--
+		}
+		adjustSlideNum(slideNum)
+	};
+
+	function addSlideNum() {
+		if (slideNum == 5) {
+			slideNum = 1;
+		} else {
+			slideNum++
+		}
+		adjustSlideNum(slideNum)
+	};
+
+	function adjustSlideNum(slideNum) {
+		slideNum = slideNum.toString();
+		var slideId = "cb" + slideNum;
+		changeWork(slideId);
+	};
+
+// };
+
+
+
+</script>
+
+
+</body>
+</html>

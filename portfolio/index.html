@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style type="text/css">
+
+	html {
+  		scroll-behavior: smooth;
+	}
+
+	body {
+  		background-color: white;
+	}
+
+	h1 {
+		font-family: cocomat;
+		font-size: 60px;
+		margin: 0px;
+	}
+
+	h2 {
+		font-family: cocomat;
+		font-size: 32px;
+		margin: 0px;
+	}
+
+	p {
+		font-family: cocomat;
+		font-size: 20px;
+	}
+
+	button {
+		font-weight: bold;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		background-color: #fee0e8;
+		border: 2px solid black;
+		font-family: forzanLight;
+		font-size: 20px;
+		border-radius: 4px;
+		padding: 16px;
+		box-shadow: 3px 6px black;
+		transition: background-color .25s ease-in-out;
+		-moz-transition: background-color .25s ease-in-out;
+		-webkit-transition: background-color .25s ease-in-out;
+	}
+
+	button:hover {
+		background-color: #FF8BAC;
+		cursor: pointer;
+	}
+
+
+	a {
+		font-family: forzanLight;
+		font-size: 20px;
+	}
+
+	ul {
+	  	list-style-type: none;
+		 	margin: 0;
+	  	padding: 0;
+	  	overflow: hidden;
+	  	float:right;
+	  	border-top: 1px solid black;
+	  	border-left: 1px solid black;
+	  	border-right: 1px solid black;
+
+	}
+
+	li {
+	  	float: right;
+
+	}
+
+	li a, .dropbtn {
+		  display: inline-block;
+			color: black;
+		  text-align: center;
+		  padding: 14px 16px;
+		  text-decoration: none;
+		  transition: background-color .25s ease-in-out;
+		-moz-transition: background-color .25s ease-in-out;
+		-webkit-transition: background-color .25s ease-in-out;
+	}
+
+	li a:hover, .dropdown:hover .dropbtn {
+	  	background-color: #FF8BAC;
+	  	cursor: pointer;
+	}
+
+	li.dropdown {
+	  	display: inline-block;
+	}
+
+	hr {
+		width: 500px;
+		float: left;
+	}
+
+
+	* {box-sizing:border-box}
+
+	label {
+		font-size: 15px;
+	}
+
+	@font-face {
+			font-family: forzanLight;
+			src: url(assets/fonts/ForzanLight-ALWAA.ttf);
+		}
+
+	@font-face {
+			font-family: cocomat;
+			src: url(assets/fonts/FontsFree-Net-cocomat-pro-light.ttf);
+		}
+
+	@font-face {
+			font-family: cocomatBold;
+			src: url(assets/fonts/FontsFree-Net-cocomat-pro-bold.ttf);
+		}
+
+	.pointer {
+		cursor: pointer;
+	}
+
+	.topBar {
+		width: 98.9%;
+		margin: 0px;
+		padding: 0px;
+		border-bottom: 1px solid black;
+		background-color: #fee0e8; 
+		z-index: 30;
+		position: fixed;
+		top: 0px;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: fixed;
+		background-color: #fee0e8;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 10;
+		border: 1px solid black;
+	}
+
+	.dropdown-content a {
+		font-family: cocomat;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		text-align: left;
+	}
+
+	.dropdown-content a:hover {
+		background-color: #FF8BAC
+	}
+
+	.dropdown:hover .dropdown-content {
+		display: block;
+	}
+
+	.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+  .centerVert {
+  	position: absolute;
+    top: 50%;
+  	transform: translateY(-50%);
+  }
+
+	.downArrow {
+		position:relative;
+		bottom: 6px;
+		-webkit-transform: scale(1.5, 1);
+	  -moz-transform: scale(1.5, 1);
+	  -o-transform: scale(1.5, 1);
+	  transform: scale(1.5, 1);
+	}
+
+	.barArrows {
+		margin-left: 10px;
+		display: inline-block;
+	}
+
+	.panel {
+		border:1px solid black;
+		height: 100%;
+		width: 100%;
+		margin-bottom: 100px;
+		box-shadow: 5px 5px 5px #c4cacf;
+		margin-top: -8px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.pagePanel {
+		float: left;
+		height: 700px;
+	}
+
+
+	.subpanel {
+		position: relative;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.subpanelTitle {
+		margin-right: 5px;
+		margin-left: 5px;
+		font-family: forzanLight;
+		font-size: 20px;
+		padding: 20px;
+		text-align: right;
+	}
+
+	.prev {
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.next {
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.arrow {
+		position: relative;
+		font-size: 40px;
+		-webkit-text-stroke: 1px white;
+		cursor: pointer;
+	}
+
+	.arrowArea {
+		position: absolute;
+		cursor: pointer;
+		transition: all .2s ease-in-out;
+		width: 60px;
+		height: 45px;
+		bottom: 0px;
+		right: 0px;
+	}
+
+	.arrowArea:hover {
+		transform: scale(1.1); 
+	}
+
+	.circleButton {
+		border-radius: 50px;
+		width: 40px;
+		height: 40px;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		z-index: 10;
+		padding: 6px;
+	}
+
+
+	.slideUp {
+    animation: slideUpFade .3s ease-in;
+	}
+
+	.subpanelText {
+		position: absolute;	
+		top: 50%;
+  	transform: translateY(-50%);
+  	padding: 60px;
+  	z-index: 10;
+	}
+
+	@keyframes slideUpFade {
+
+		50% {
+			opacity: 0;
+		}
+
+		100% {
+			top: -50px;
+			opacity: 0;
+		}
+	}
+
+	.slideUpFromDown {
+    animation: slideUpDownFade .3s ease-out;
+	}
+
+	.subpanelHR {
+		position: relative;
+		border: .5px solid black;
+	}
+
+	@keyframes slideUpDownFade {
+
+		0% {
+			opacity: 0;
+			transform: translateY(100%);
+		}
+
+		50% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(-50%);
+		}
+	}
+
+	.leftTopBar {
+		text-align: left;
+	}
+
+	.dot {
+	  cursor: pointer;
+	  height: 15px;
+	  width: 15px;
+	  margin: 10px 2px;
+	  background-color: #bbb;
+	  border-radius: 50%;
+	  display: inline-block;
+	  transition: background-color 0.6s ease;
+	}
+
+	.active, .dot:hover {
+	  background-color: #717171;
+	}
+
+	.subpanelButton {
+		position: relative;
+		font-size: 16px;
+	}
+
+	.fa.fa-instagram {
+		margin-right: 5px;
+		font-size: 36px;
+		position: absolute;
+		left: 10px;
+		top: 7px;
+	}
+
+	.fa.fa-external-link {
+		margin-left: 4px;
+	}
+
+	.subBar {
+		width: 100%;
+		margin: 0px;
+		position: relative;
+		z-index: 10;
+	}
+
+	.centerHoriz {
+		left: 50%;
+	  transform: translateX(-50%);
+	}
+
+	.arts {
+		box-shadow: 5px 5px 5px #c4cacf;
+		border: 1px solid black;
+		transition: all .4s ease-in-out;
+		margin-left: 36px;
+		position: relative;
+		cursor: zoom-in;
+	}
+
+	.arts:hover{
+		transform: scale(1.1);
+	}
+
+	.subBarText {
+		font-family: forzanLight;
+		font-size: 26px;
+		padding-top:10px;
+		padding-bottom: 6px;
+	}
+
+	.artMoreInfoText {
+		font-family: cocomatBold;
+		font-size: 18px;
+		padding: 0px;
+		margin: 10px;
+		display: inline;
+	}
+
+	.shrinkBR {
+	  display: block; /* makes it have a width */
+	  content: ""; /* clears default height */
+	  margin-top: 2px; /* change this to whatever height you want it */
+	}
+
+	.musics {
+		box-shadow: 5px 5px 5px #c4cacf;
+		border: 1px solid black;
+		margin-bottom: 30px;
+		position: relative;
+		cursor: pointer;
+		transition: all .4s ease-in-out;
+	}
+
+	.musics:hover{
+		transform: scale(1.1);
+	}
+
+	.musicCover {
+		opacity: 0;
+		transition: all .4s ease-in-out;
+	}
+
+	.musicCover:hover {
+		opacity: .75;
+	}
+
+	.musicCoverText {
+		color: white;
+		font-size: 24px;
+	}
+
+	.equalizer {
+		width: 70px;
+		margin-right: 18px;
+		margin-left: -4px;
+	}
+
+	.coverTextDiv {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#scrollDown {
+		bottom: 16px;
+		position: fixed;
+		left: 50%;
+    transform: translate(-50%, 0) scale(1.5, 1);
+		text-align: center;
+		font-size: 90px;
+		margin: 0px;
+		z-index: 10;
+		color: black;
+		text-decoration: none;
+		transition: all .2s ease-in-out;
+	}
+
+	#scrollDown:hover {
+		transform: translate(-50%, 0) scale(1.6, 1.1);
+	}
+
+	#centerWords {
+		padding-top: 280px;
+		padding-bottom: 180px;
+	}
+
+	#geometric {
+		position: absolute;
+		width: 570px;
+		height: 570px;
+		z-index: -5;
+		bottom: 0px;
+		right: 30px;
+		opacity: .7;
+	}
+
+	#titlePanel {
+		padding-left: 30px;
+		padding-right: 30px;
+		margin-top: 51px;
+	}
+
+	#workImagesSP {
+		float: left;
+		display: flex;
+    align-items: center;
+    border-right: .5px solid black;
+    width: 50%;
+	}
+
+	#workDescSP{
+		float: right;
+		text-align: left;
+		background-color: #9a8dc7;
+		border-left: .5px solid black;
+		width: 50%;
+	}
+
+	#workImage {
+		width: 90%;
+		border: 2px solid black;
+	}
+
+	#cb2 {
+		background-color: #9cbded
+	}
+
+	#cb2:hover {
+		background-color: #4A88E2;
+	}
+
+	#cb3 {
+		background-color: #afedef;
+	}
+
+	#cb3:hover {
+		background-color: #14C3CB;
+	}
+
+	#cb4 {
+		background-color: #ffe5c4;
+	}
+
+	#cb4:hover {
+		background-color: #FFBA62;
+	}
+
+	#cb5 {
+		background-color: #ECFF9F;
+	}
+
+	#cb5:hover {
+		background-color: #B7DB25;
+	}
+
+	#upArrowArea {
+		bottom: 66px;
+		right: 18px;
+	}
+
+	#downArrowArea {
+		bottom: 16px;
+		right: 18px;
+	}
+
+	#workPanel2 {
+		display: none;
+	}
+
+	#circles {
+		position: absolute;
+		top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+		width: 45px;
+		height: auto;
+  	z-index: 20;
+	}
+
+	#aboutPicSP {
+		float: left;
+		display: flex;
+    align-items: center;
+    border-left: .5px solid black;
+    width: 40%;
+	}
+
+	#aboutDescSP {
+		float: left;
+		display: flex;
+    align-items: center;
+    border-right: .5px solid black;
+    background-color: #afedef;
+    width: 60%;
+	}
+
+	#aboutPic {
+		border: 2px solid black;
+		width: 350px;
+		z-index: 10;
+	}
+
+	#aboutPicBackground {
+		position: absolute;
+		width: 600px;
+	}
+
+	#artTitleBar {
+		text-align: center;
+		padding-top: 10px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid black;
+		background-color: #9cbded; 
+		top: 0px;
+	}
+
+	#instagramButton1 {
+		padding-left: 50px;
+		position: absolute;
+		right: 20px;
+		top: 50%;
+  	transform: translateY(-50%);
+  	margin-top: -6px;
+  	margin-right: 3px;
+	}
+
+	#instagramContainer {
+		float: left;
+		height: auto;
+		width: 100%;
+		position: absolute;
+		top: 50%;
+  	transform: translateY(-50%);
+	}
+
+	#digitalSP {
+		text-align: center;
+		float: left;
+    align-items: center;
+    border-right: .5px solid black;
+    border-bottom: 1px solid black;
+    background-color: #ffe5c4;
+    width: 50%;
+		cursor: pointer;
+		transition: background-color .25s ease-in-out;
+	}
+
+	#digitalSP:hover {
+		background-color: #FFBA62;
+	}
+
+	#physicalSP {
+		text-align: center;
+		float: right;
+    align-items: center;
+    border-left: .5px solid black;
+    border-bottom: 1px solid black;
+    background-color: #ecfe9f;
+    width: 50%;
+		cursor: pointer;
+		transition: background-color .25s ease-in-out;
+	}
+
+	#physicalSP:hover {
+		background-color: #B7DB25;
+	}
+
+	#artsContainer {
+		height: 396px;
+		width: 100%;
+		overflow: auto;
+		white-space: nowrap;
+	}
+
+	#artDescBar {
+		height: 150px;
+		border-top: 1px solid black;
+		background-color: #9cbded; 
+		position: relative;
+		overflow: scroll;
+	}
+
+	#artTitleSP {
+		height: 100%;
+		width: 65%;
+		float: left;
+    text-align: center;
+    border-right: .5px solid black;
+
+	}
+
+	#artOtherInfoSP {
+		height: 100%;
+		width: 35%;
+		position: relative;
+    align-items: center;
+    border-left: .5px solid black;
+	}
+
+	#artName {
+		width: 870px;
+		font-size: 46px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	#piano {
+		height: 1200px;
+		transform: rotate(210deg);
+		position: absolute;
+		left: 70px;
+		top: -300px;
+	}
+
+	#pianoMusic {
+		color: white;
+		z-index: 10;
+		position: absolute;
+	}
+
+	#pianoTitleBox {
+		position: absolute;
+		top: 40px;
+		left: 30px;
+		width: auto;
+		height: 100px;
+		z-index: 10;
+	}
+
+	#musicContainer {
+		position: absolute;
+		right: 0px;
+		height: 100%;
+		border-left: 1px solid black;
+		width: 30%;
+		overflow: scroll;
+		background-color: white;
+	}
+
+	#musicScrollBox {
+		float: left;
+		height: 100%;
+		width: auto;
+		position: absolute;
+		margin-top: 46px;
+	}
+
+	#musicDescDiv {
+		width: 360px;
+		height: 25%;
+		text-align: right;
+		margin: 50px;
+		position: absolute;
+		bottom: 30px;
+		right: 0px;
+		z-index: 10;
+	}
+
+	#musicDesc {
+		font-size: 26px;
+		position: absolute;
+		margin: 0px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	#leftPianoSP {
+		position: absolute;
+		left: 0px;
+		height: 100%;
+		width: 70%;
+		background-color: #afedef;
+	}
+
+</style>
+	</head>
+
+
+<body>
+
+	<ul class="topBar">
+	   <li class="dropdown">
+	  	<a class="dropbtn">Contact<label class="downArrow barArrows">&#8964;</label></a>
+		<div class="dropdown-content">
+			<a>Direct Contact</a>
+			<a>Social Media</a>
+			<a>Other Links</a>
+		</div>
+	  </li>
+	  <li class="dropdown">
+	  	<a class="dropbtn">Resume<label class="downArrow barArrows">&#8964;</label></a>
+	  	<div class="dropdown-content">
+			<a>View Resume</a>
+		</div>
+	  </li>	  
+	  <li class="dropdown">
+	    <a class="dropbtn">Miscellaneous<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Piano Sheet Music & Tutorials</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a class="dropbtn">Art<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Digital Art</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a class="dropbtn">About<label class="downArrow barArrows">&#8964;</label></a>
+	    <div class="dropdown-content">
+	      <a>Summary</a>
+	    </div>
+	  </li>
+	  <li class="dropdown"><a href="#work">Work<label class="downArrow barArrows">&#8964;</label></a>
+	  	<div class="dropdown-content">
+	      <a>OCxD</a>
+	       <a>Animal Crossing Weather Bot</a>
+	      <a>Dog Gacha</a>
+	      <a>Dog Visual Novel Game</a>
+	      <a>Other Minor Works</a>
+	    </div>
+	  </li>
+	</ul>
+
+	<div class="panel" id="titlePanel">
+		<img id="geometric" src="assets/images/geometricalPort.png" alt="geometrical design">
+		<div id="centerWords">
+			<h1 onclick="parent.location='index.html'" class="pointer">Annika Chavez</h1><hr class="subpanelHR"><br>
+			<h2>UI design, web design, app creation, and graphic design.</h2>
+		</div>
+	<a id="scrollDown" class="downArrow" href="#work">&#8964;</a>
+	</div>
+
+	<div class="panel pagePanel" id="work">
+
+		<div id="circles">
+			<button id="cb1" class="circleButton" onclick="changeWork(this.id)">1</button>
+			<button id="cb2" class="circleButton" onclick="changeWork(this.id)">2</button>
+			<button id="cb3" class="circleButton" onclick="changeWork(this.id)">3</button>
+			<button id="cb4" class="circleButton" onclick="changeWork(this.id)">4</button>
+			<button id="cb5" class="circleButton" onclick="changeWork(this.id)">5</button>
+		</div>
+
+		<div class="subpanel" id="workImagesSP">
+			<div style="text-align:center">
+				<img id="workImage" src="assets/images/OCxDexampleOne.png" alt="Work Image"><br>
+			  <span class="dot"></span>
+			  <span class="dot"></span>
+			  <span class="dot"></span>
+			</div>
+		</div>
+
+		<div class="subpanel" id="workDescSP">
+
+			<div class="subpanelText" id="workPanel1">
+				<h1 id="workDescTitle"></h1>
+				<hr class="subpanelHR"><br>
+				<p id="workDescDesc"></p>
+				<button class="subpanelButton">Link to web app <i class="fa fa-external-link"></i></button>
+			</div>
+
+
+			<div class="subpanelText" id="workPanel2">
+				<h1 id="workDescTitle2"></h1>
+				<hr class="subpanelHR"><br>
+				<p id="workDescDesc2"></p>
+			</div>
+
+			<div id="upArrowArea" class="arrowArea">
+				<a class="prev">Prev<label class="arrow">&#8593;</label></a>
+			</div>
+
+			<div id="downArrowArea" class="arrowArea">
+  			<a class="next">Next<label class="arrow">&#8595;</label></a>
+  			</div>
+
+		</div>
+
+	</div>
+
+	<div class="panel pagePanel" id="about">
+
+		<div class="subpanel" id="aboutDescSP">
+			<div class="subpanelText">
+				<h1>About</h1>
+				<hr class="subpanelHR" style="width:700px;"><br>
+				<p id="aboutDesc"> My name is Annika Chavez. I love to create ideas and conceptualize as well as play a part in the implementation and development. I have always been interested in digital art and graphic design as a kid. In high school, I began to teach myself programming in order to further utilize my skills. My current abilities range solely from art and design, to implementing the art into front end programming, and even working on the mechanics of programs and apps themselves through languages like Javascript.<br><br>I'm currently a student at Diablo Valley College pursuing a degree in Cognitive Science in hopes of going into the UX/UI design field. When I'm not designing or programming, I love to draw, create music, play piano or guitar, sing, sew, and play video games. </p>
+			</div>
+		</div>
+
+		<div class="subpanel" id="aboutPicSP">
+			<img id="aboutPicBackground" class="center" src="assets/images/pictureBackground.png">
+			<img id="aboutPic" class="center" src="assets/images/professionalHeadShot.jpg" alt="picture of Annika">
+		</div>
+
+	</div>
+
+	<div class="panel pagePanel" id="art">
+
+		<div id="artTitleBar" class="subBar">
+			<h1>Art</h1>
+			<hr class="subpanelHR centerHoriz" style="margin-top: -2px;">
+			<button class="subpanelButton" id="instagramButton1"><i class="fa fa-instagram"></i>Art Instagram <i class="fa fa-external-link"></i></button>
+		</div>
+
+		<div class="subBar" id="artSelectionBar">
+
+			<div class="subpanel" id="digitalSP" onclick="showDigital();">
+				<h2 class="subBarText">Digital</h2>
+			</div>
+
+			<div class="subpanel" id="physicalSP" onclick="showPhysical();">
+				<h2 class="subBarText">Physical</h2>
+			</div>
+		</div>
+
+		<div class="subpanel" id="artsContainer">
+			<div id="instagramContainer">
+			</div>
+		</div>
+
+		<div id="artDescBar" class="subpanel">
+
+			<div class="subpanel" id="artTitleSP">
+				<h1 id="artName"></h1>
+			</div>
+			
+			<div class="subpanel" id="artOtherInfoSP">
+				<div style="width:100%; height: 126px; position: absolute;" class="centerVert">
+					<p class="artMoreInfoText">Date Published:</p><label id="artDate" style="font-family: cocomat;"></label><br class="shrinkBR">
+					<p class="artMoreInfoText">Medium Used:</p><label id="artMedium" style="font-family: cocomat;"></label><br class="shrinkBR">
+					<p class="artMoreInfoText">Purpose:</p><label id="artPurpose" style="font-family: cocomat;"></label><br class="shrinkBR">
+					<p class="artMoreInfoText">Character(s):</p><label id="artCharacter" style="font-family: cocomat;"></label><br class="shrinkBR">
+					<p class="artMoreInfoText">Origin of Character(s):</p><label id="artOrigin" style="font-family: cocomat;"></label>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="panel pagePanel" id="music">
+
+		<div class="subpanel" id="leftPianoSP">
+
+			<div id="pianoTitleBox">
+				<h1 id="pianoMusic" class="centerVert">Piano Music</h1>
+				<hr style="color: white; position: relative; top: 75px">
+			</div>
+			<div style="width:400px; height: 400px; position: absolute; top: 0px; left: 0px; background-color: black"></div>
+
+			<div id="musicDescDiv">
+				<p id="musicDesc">I create piano music and publish the music sheets and video tutorials for them. Hover over a music piece to listen to it, and click to view more info + links.</p>
+			</div>
+		</div>
+
+		<img id="piano" src="assets/images/piano.png">
+
+		<div class="subpanel" id="musicContainer">
+			<div id="musicScrollBox" class="centerHoriz">
+			</div>
+		</div>
+	</div>
+
+	<div class="panel pagePanel" id="resume">
+		<h1>Resume</h1>
+	</div>
+
+	<div class="panel pagePanel" id="contact">
+		<h1>Contact</h1>
+	</div>	
+
+<script>
+
+	//screenheight stuff
+
+	let screenHeight = window.innerHeight;
+	screenHeight = screenHeight * .92
+	const panels = document.getElementsByClassName("panel");
+	for (let i = 0; i < panels.length; i++) {
+  		panels[i].style.height =  screenHeight + "px";
+	}
+
+	//workSlide stuff
+
+	const titleEFTC = "OCxD: EF Training Classic";
+	const titleACWB = "Animal Crossing Weather Bot";
+	const titleDG = "Dog Gacha";
+	const titleDVNG = "Dog Visual Novel Game";
+	const titleOMW = "Other Minor Works";
+
+	const descEFTC = "Inspired by an app used for treatment in an OCD treatment center, EF Training Classic is an Exposure and Response Therapy based tool that can be used to improve OCD symptoms. EF Training Classic is a part of a bigger project in progress, OCxD. OCxD is a web app equipped with various Exposure and Response Therapy based tools and resources used aid someone in treating their OCD.";
+	const descACWB = "This is about the Animal Crossing Weather Bot.";
+	const descDG = "This is about the Dog Gacha.";
+	const descDVNG = "This is about the Dog Visual Novel Game.";
+	const descOMW = "This is about other minor works.";
+
+	//displays first slide automatically
+
+	var workPanel1Theme = "EFTC";
+	var workPanel2Theme;
+	var slideNum = 1;
+	var newSlideNum;
+
+	document.getElementById("workDescTitle").innerHTML = titleEFTC;
+	document.getElementById("workDescDesc").innerHTML = descEFTC;
+
+	//Art Display
+
+	const davidAndLucy = {name: "David and Lucy", workType: "fan art", character: "David Martinez, Lucy", origin: "Cyberpunk Edgerunners", source:"assets/images/instagramArt/digital/davidAndLucy.png", medium:"Adobe Photoshop", date:"October 16, 2022"}
+	const friends = {name: "The Sauna Club", workType: "personal", origin: "n/a", character: "n/a", source:"assets/images/instagramArt/digital/friends.png", medium: "Adobe Photoshop", date: "August 23, 2021"}
+	const commissionDND = {name: "Commission for a DnD Character", workType: "commission", origin: "Original Character", character: "n/a",  source: "assets/images/instagramArt/digital/commissionDND.jpg", medium: "Adobe Photoshop CS6", date: "June 15, 2021"}
+	const zoe = {name: "Exe-CUTE!! Spirit Evolution", workType: "fan art", origin: "Digimon Frontier", character: "Zoe Orimoto", source: "assets/images/instagramArt/digital/zoe.jpg", medium: "Adobe Photoshop CS6", date:"June 9, 2021"}
+	const couple = {name:"Couple", workType:"personal", origin:"n/a", character: "n/a", source:"assets/images/instagramArt/digital/couple.jpeg", medium:"Adobe Photoshop CS6", date:"December 29, 2020"}
+	const inoriYuzuriha = {name:"Inori Yuzuriha", workType: "commission", origin: "Guilty Crown", character: "Inori Yuzuriha", source:"assets/images/instagramArt/digital/inoriYuzuriha.jpeg", medium: "Adobe Photoshop CS6", date:"April 6, 2020"}
+	const sombra = {name:"Sombra", workType:"fan art", origin:"Overwatch", character: "Sombra", source:"assets/images/instagramArt/digital/sombra.jpeg", medium:"Adobe Photoshop CS6", date: "April 6, 2020"}
+	const darling002 = {name:"002", workType:"personal", origin: "Darling In The FranXX", character: "002", source:"assets/images/instagramArt/digital/002.jpeg", medium:"Adobe Photoshop CS6", date:"April 4, 2020"}
+	const zelda = {name: "Zelda: Breath of the Wild", workType: "fan art", origin: "Breath of the Wild", character: "Princess Zelda", source:"assets/images/instagramArt/digital/zeldaBOTW.jpeg", medium:"Adobe Photoshop CS6", date:"November 26, 2019"}
+	const eugeniaCooney = {name: "Eugenia the Nobody", workType:"fan art", origin: "Influencer Eugenia Cooney, Kingdom Hearts", character: "(inspired by) Organization XIII members", source:"assets/images/instagramArt/digital/eugeniaCooney.jpeg", medium:"Adobe Photoshop CS6", date: "November 26, 2019"}
+
+	const cyberpunkJudy = {name:"Judy", workType: "fan art", origin: "Cyberpunk 2077", character: "Judy Alvarez", source:"assets/images/instagramArt/physical/cyberpunkJudyPhysical.jpg", medium: "marker", date:"January 4, 2022"}
+	const ocdArt = {name: "Mental Compulsions", workType:"personal", origin:"n/a", character: "n/a", source:"assets/images/instagramArt/physical/OCDart.JPG", medium: "marker", date:"January 4, 2022"}
+	const jinxArcane = {name: "Loose Cannon", workType: "fan art", origin: "Arcane", character: "Jinx", source:"assets/images/instagramArt/physical/jinxArcanePhysical.JPG", medium:"marker", date: "January 4, 2022"}
+	const maya = {name: "Stay Positive", workType: "fan art", origin: "Persona 2", character: "Maya Amano", source:"assets/images/instagramArt/physical/mayaPhysical.jpg", medium:"marker", date:"August 11, 2021"}
+	const nagi = {name: "Nagi the Ghost Trainer", workType:"fan art", origin:"NEO: The World Ends With You, Pokemon", character: "Nagi Usui", source:"assets/images/instagramArt/physical/nagi.jpg", medium:"marker", date:"July 1, 2021"}
+	const zoePhysical = {name: "Zoe", workType: "fan art", origin: "Digimon Frontier", character: "Zoe Orimoto", source: "assets/images/instagramArt/physical/zoePhysical.jpg", medium: "marker", date:"June 3, 2021"}
+	const yumekoAndMary = {name: "Let's Gamble!", workType:"fan art", origin:"Kakegurui", character: "Yumeko Jabami, Mary Saotome", source:"assets/images/instagramArt/physical/yumekoAndMaryPhysical.jpg", medium:"marker", date:"May30, 2021"}
+	const cyberpunkV = {name: "My Version of V from Cyberpunk 2077", workType:"fan art", origin: "Cyberpunk 2077", character: "V (female)", source:"assets/images/instagramArt/physical/cyberpunkVPhysical.jpg", medium:"marker", date:"May 30, 2021"}
+	const randomDrawing = {name: "Crayola Style", workType: "practice", origin: "original design", character: "n/a", source:"assets/images/instagramArt/physical/randomDrawingPhysical.jpeg", medium:"marker", date:"May 30, 2021"}
+
+	const digitalArts = [davidAndLucy, friends, commissionDND, zoe, couple, inoriYuzuriha, sombra, darling002, zelda, eugeniaCooney];
+	const physicalArts = [cyberpunkJudy, ocdArt, jinxArcane, maya, nagi, zoePhysical, yumekoAndMary, cyberpunkV, randomDrawing]
+
+	showDigital();
+
+	function showDigital() {
+		createInstaImages(digitalArts);
+	}
+
+	function showPhysical() {
+		createInstaImages(physicalArts);
+	}
+
+	function createInstaImages(imgObj) {
+
+		document.getElementById('instagramContainer').innerHTML = "";
+
+		for (let i = 0; i < imgObj.length; i++) {
+
+			var img = document.createElement('img');
+			img.src = imgObj[i].source;
+			img.style.height = "300px"
+			img.style.width = "300px"
+			img.style.objectFit = "cover";
+			img.className = "arts";
+			img.onmouseover = function() {showInfo(imgObj[i])};
+			img.onmouseout = function() {hideInfo(imgObj[i])};
+
+
+			document.getElementById('instagramContainer').appendChild(img);
+		}
+	};
+
+	//art information display
+
+	function showInfo(artPiece) {
+		document.getElementById("artName").innerHTML = artPiece.name;
+		document.getElementById("artDate").innerHTML = artPiece.date;
+		document.getElementById("artMedium").innerHTML = artPiece.medium;
+		document.getElementById("artPurpose").innerHTML = artPiece.workType;
+		document.getElementById("artOrigin").innerHTML = artPiece.origin;
+		document.getElementById("artCharacter").innerHTML = artPiece.character;
+	}
+
+	function hideInfo() {
+		document.getElementById("artName").innerHTML = "";
+		document.getElementById("artDate").innerHTML = "";
+		document.getElementById("artMedium").innerHTML = "";
+		document.getElementById("artPurpose").innerHTML = "";
+		document.getElementById("artOrigin").innerHTML = "";
+		document.getElementById("artCharacter").innerHTML = "";
+	}
+
+	//piano music
+
+		const onBTS = {idName: "audioOnBTS", name: "On - BTS (방탄소년단)", source:"assets/images/youtubeThumbnails/OnBTS.jpeg", audio:"assets/audio/on.mp3", demo:"assets/audio/onDemo.mp3", date:"March 10, 2020", difficulty: "advanced", scoreType: "arrangement"}
+		const memoriesOfTheCity = {idName: "audioMemoriesOfTheCity", name: "Memories Of The City - Persona 3", source:"assets/images/youtubeThumbnails/MemoriesOfTheCity.jpeg", audio: "assets/audio/memoriesOfTheCity.mp3", demo:"assets/audio/memoriesOfTheCityDemo.mp3", date:"September 27, 2019", difficulty: "advanced", scoreType: "transcription"}
+		const deadmansGun = {idName: "audioDeadmansGun", name: "Deadman's Gun - Red Dead Redemption", source:"assets/images/youtubeThumbnails/deadmansGun.jpeg", audio: "assets/audio/deadmansGun.mp3", demo: "assets/audio/deadmansGunDemo.mp3", date: "July 31, 2019", difficulty: "intermediate", scoreType: "transcription"}
+		const newBorn = {idName: "audioNewBorn", name: "New Born (Hybrid) - The World Ends With You",  source: "assets/images/youtubeThumbnails/newBornHybrid.png", audio: "assets/audio/newBornHybrid.mp3", demo: "assets/audio/newBornHybridDemo.mp3", date: "July 29, 2021", difficulty: "advanced", scoreType: "transcription"}
+
+		const pianoMusic = [onBTS, memoriesOfTheCity, deadmansGun, newBorn];
+
+		createMusicImages(pianoMusic);
+
+		function createMusicImages(musicObj) {
+
+		for (let i = 0; i < musicObj.length; i++) {
+
+			var div = document.createElement('div');
+			div.style.width = "320px";
+			div.style.height = "180px";
+			div.className = "musics";
+			div.style.backgroundImage = "url('" + musicObj[i].source + "')";
+			div.style.backgroundSize = "100%";
+			document.getElementById('musicScrollBox').appendChild(div);
+
+			var cover = document.createElement('div');
+			cover.style.width = "100%";
+			cover.style.height = "100%";
+			cover.style.zIndex = "10";
+			cover.style.backgroundColor = "black";
+			cover.className = "musicCover";
+			div.appendChild(cover);
+
+			var coverTextDiv = document.createElement('div');
+			coverTextDiv.style.width = "100%";
+			coverTextDiv.style.height = "100px";
+			coverTextDiv.className = "coverTextDiv centerVert";
+			cover.appendChild(coverTextDiv);
+
+			var gif = document.createElement('img');
+			gif.src = "assets/images/equalizer.gif"
+			gif.className = "equalizer";
+			coverTextDiv.appendChild(gif);
+
+			var text = document.createElement('p');
+			text.innerHTML = "click for more info";
+			text.className = "musicCoverText";
+			coverTextDiv.appendChild(text);
+
+
+			//music stuff
+
+			var song = document.createElement('audio');
+			var demoIdName = musicObj[i].idName + "Demo";
+			song.setAttribute("id", demoIdName);
+			song.src = musicObj[i].demo;
+			document.getElementById('musicScrollBox').appendChild(song);
+
+			cover.onmouseenter = function() {playMusic(musicObj[i])};
+			cover.onmouseleave = function() {stopMusic(musicObj[i])};
+		}
+	};
+
+		//plays music on hover
+
+		function playMusic(musicObj) {
+			var demoIdName = musicObj.idName + "Demo";
+			var song = document.getElementById(demoIdName);
+
+			song.play();
+
+			$(document).ready(function(){
+        $("#" + demoIdName)[0].volume = 0;
+        $("#" + demoIdName).animate({volume: 1}, 2000);
+      });
+
+			song.loop = true;
+		}
+
+		function stopMusic(musicObj, idName) {
+			var demoIdName = musicObj.idName + "Demo";
+
+			$(document).ready(function(){
+        $("#" + demoIdName).animate({volume: 0}, 500);
+      });
+
+      setTimeout(function(){
+      	document.getElementById(demoIdName).pause();
+      	document.getElementById(demoIdName).currentTime = 0;
+      }, 500);
+		};
+
+
+
+</script>
+
+
+</body>
+</html>
